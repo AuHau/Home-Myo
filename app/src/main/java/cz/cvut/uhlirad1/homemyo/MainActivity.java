@@ -5,15 +5,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import cz.cvut.uhlirad1.homemyo.knx.AdapterFactory;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.knx.KnxDataTypeEnum;
 import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
+import cz.cvut.uhlirad1.homemyo.localization.ITracker;
+import cz.cvut.uhlirad1.homemyo.localization.Room;
+import cz.cvut.uhlirad1.homemyo.localization.TrackerException;
+import cz.cvut.uhlirad1.homemyo.localization.TrackerFactory;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
 
-
+@EActivity
 public class MainActivity extends Activity {
+
+    ITracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +54,9 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void sendPacket(View view){
-        Command command = new Command(1, "Example", "Example", "1/1/1", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+    @Click
+    public void turnOnAll(View view){
+        Command command = new Command(1, "Example", "Example", "3/0/10", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
 
         CatTelegram telegram = new CatTelegram();
         telegram.setCommand(command);
@@ -56,5 +65,35 @@ public class MainActivity extends Activity {
         CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter();
 
         adapter.execute(telegram);
+    }
+
+    @Click
+    public void turnOffAll(View view){
+        Command command = new Command(1, "Example", "Example", "3/0/10", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+
+        CatTelegram telegram = new CatTelegram();
+        telegram.setCommand(command);
+        telegram.setBoolean(false);
+
+        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter();
+
+        adapter.execute(telegram);
+    }
+
+    @Click
+    public void showLocation(View view){
+        if(tracker == null){
+            tracker = TrackerFactory.createTracker(this);
+        }
+
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = null;
+        try {
+            toast = Toast.makeText(this, tracker.getLocation().getName(), duration);
+        } catch (TrackerException e) {
+            e.printStackTrace();
+        }
+        toast.show();
     }
 }

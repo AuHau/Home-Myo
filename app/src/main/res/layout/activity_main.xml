@@ -11,9 +11,25 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send telegram"
-            android:id="@+id/button"
+            android:text="Turn on all lights"
+            android:id="@+id/turnOnAll"
+            android:layout_above="@+id/turnOffAll"
+            android:layout_centerHorizontal="true"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show current location"
+            android:id="@+id/showLocation"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="sendPacket"/>
+            android:layout_centerHorizontal="true"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turn off all lights"
+            android:id="@+id/turnOffAll"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/turnOnAll"
+            android:layout_alignEnd="@+id/turnOnAll"/>
 </RelativeLayout>

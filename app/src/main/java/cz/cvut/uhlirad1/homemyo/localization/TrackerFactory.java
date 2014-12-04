@@ -1,5 +1,8 @@
 package cz.cvut.uhlirad1.homemyo.localization;
 
+import android.content.Context;
+import cz.cvut.uhlirad1.homemyo.localization.cat.TrackerCAT;
+
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 3.12.14
@@ -13,8 +16,8 @@ public final class TrackerFactory {
     private TrackerFactory() {
     }
 
-    public static ITracker createTracker(){
+    public static ITracker createTracker(Context context){
 
-        return null;
+        return new TrackerCAT(RoomsParserFactory.createHomeParser(), context);
     }
 }

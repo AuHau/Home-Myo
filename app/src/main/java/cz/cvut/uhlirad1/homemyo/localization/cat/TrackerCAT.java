@@ -29,7 +29,8 @@ public class TrackerCAT implements ITracker {
             trackerAppPreferences = trackerAppContext.getSharedPreferences(TRACKER_APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         } catch (PackageManager.NameNotFoundException e) {
-            // TODO: Co s tím, když nenašel TrackerService? Nastavit že Tracking neni zapnutý...
+            // TODO: Co s tím, když nenašel TrackerService? Zobrazit Toast a nastavit že Tracking neni zapnutý...
+            e.printStackTrace();
         }
     }
 
