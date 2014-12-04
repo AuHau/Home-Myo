@@ -1,15 +1,36 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+def AAVersion = '3.2'
 
 repositories {
         jcenter()
+        mavenCentral()
+        mavenLocal()
+}
+
+
+dependencies {
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+
+        resourcePackageName 'cz.cvut.uhlirad1.homemyo'
+    }
 }
 
 android {
@@ -31,6 +52,3 @@ android {
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
