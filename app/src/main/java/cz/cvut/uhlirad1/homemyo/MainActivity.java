@@ -1,6 +1,7 @@
 package cz.cvut.uhlirad1.homemyo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,14 +39,12 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Intent intent = new Intent();
+                intent.setClass(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -53,7 +52,7 @@ public class MainActivity extends Activity {
 
     @Click
     public void turnOnAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHT);
 
         CatTelegram telegram = new CatTelegram();
         telegram.setCommand(command);
@@ -66,7 +65,7 @@ public class MainActivity extends Activity {
 
     @Click
     public void turnOffAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHT);
 
         CatTelegram telegram = new CatTelegram();
         telegram.setCommand(command);

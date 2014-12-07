@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="@string/pref_knx_category"
+            android:key="knx_category">
+        <EditTextPreference
+                android:key="knx_ip"
+                android:title="@string/pref_knx_ip"
+                android:defaultValue="@string/default_knx_ip"
+                />
+        <EditTextPreference
+                android:key="knx_port"
+                android:title="@string/pref_knx_port"
+                android:numeric="integer"
+                android:defaultValue="@integer/default_knx_port"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Localization"
+            android:key="loc_category">
+        <CheckBoxPreference
+                android:key="loc_enabled"
+                android:title="@string/pref_loc_enabled"
+                android:defaultValue="@bool/default_loc_enabled"/>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -5,7 +5,7 @@ package cz.cvut.uhlirad1.homemyo.knx;
  * Date: 3.12.14
  */
 public enum KnxElementTypes {
-    LIGHTN,
+    LIGHT,
     DOOR,
     BLIND,
     POWER_PLUG,

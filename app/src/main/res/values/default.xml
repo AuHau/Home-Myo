@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_knx_ip">192.168.1.11</string>
+    <bool name="default_loc_enabled">false</bool>
     <integer name="default_knx_port">1111</integer>
 </resources>
