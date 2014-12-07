@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 
     @Click
     public void turnOnAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/0/10", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
 
         CatTelegram telegram = new CatTelegram();
         telegram.setCommand(command);
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
     @Click
     public void turnOffAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/0/10", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
+        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHTN);
 
         CatTelegram telegram = new CatTelegram();
         telegram.setCommand(command);
@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
 
         Toast toast = null;
         try {
-            toast = Toast.makeText(this, tracker.getLocation().getName(), duration);
+            toast = Toast.makeText(this, tracker.getLocation(false).getName(), duration);
         } catch (TrackerException e) {
             e.printStackTrace();
         }

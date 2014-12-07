@@ -14,6 +14,7 @@ public final class AdapterFactory extends android.app.Application{
     public static IAdapter createAdapter(){
 //        preferences.getString("serverIp", null);
         // TODO: Načíst ip adresu a port z nastavení
-        return new CatAdapter("192.168.1.11", 1112);
+        // CAT intl. rozvaděč
+        return new CatAdapter("192.168.88.252", 3671);
     }
 }
