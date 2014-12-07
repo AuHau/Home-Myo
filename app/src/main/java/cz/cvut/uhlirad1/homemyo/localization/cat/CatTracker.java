@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.HashMap;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 3.12.14
  */
-public class TrackerCAT implements ITracker {
+public class CatTracker implements ITracker {
 
     private HashMap<String, Room> mapping;
 
@@ -22,19 +23,19 @@ public class TrackerCAT implements ITracker {
     private String TRACKER_APP_PREFERENCE_NAME = "sharedRoom";
     private String TRACKER_APP_PREFERENCE_KEY = "room";
 
-    public TrackerCAT(IRoomsParser parser, Context context) {
+    public CatTracker(IRoomsParser parser, Context context) {
         mapping = parser.parseMapping();
         try {
             Context trackerAppContext = context.createPackageContext(TRACKER_APP_PACKAGE, 0);
             trackerAppPreferences = trackerAppContext.getSharedPreferences(TRACKER_APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         } catch (PackageManager.NameNotFoundException e) {
-            // TODO: Co s tím, když nenašel TrackerService? Zobrazit Toast a nastavit že Tracking neni zapnutý...
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("loc_enabled", false);
             e.printStackTrace();
         }
     }
 
-    public  TrackerCAT(IRoomsParser parser, Context context, String trackerAppPackage, String trackerAppPrefName, String trackerAppPrefKey){
+    public CatTracker(IRoomsParser parser, Context context, String trackerAppPackage, String trackerAppPrefName, String trackerAppPrefKey){
         this(parser, context);
 
         TRACKER_APP_PACKAGE = trackerAppPackage;
