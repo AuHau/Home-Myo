@@ -12,10 +12,7 @@ import cz.cvut.uhlirad1.homemyo.knx.KnxDataTypeEnum;
 import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
-import cz.cvut.uhlirad1.homemyo.localization.ITracker;
-import cz.cvut.uhlirad1.homemyo.localization.Room;
-import cz.cvut.uhlirad1.homemyo.localization.TrackerException;
-import cz.cvut.uhlirad1.homemyo.localization.TrackerFactory;
+import cz.cvut.uhlirad1.homemyo.localization.*;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
@@ -62,7 +59,7 @@ public class MainActivity extends Activity {
         telegram.setCommand(command);
         telegram.setBoolean(true);
 
-        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter();
+        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter(this);
 
         adapter.execute(telegram);
     }
@@ -75,7 +72,7 @@ public class MainActivity extends Activity {
         telegram.setCommand(command);
         telegram.setBoolean(false);
 
-        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter();
+        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter(this);
 
         adapter.execute(telegram);
     }
@@ -83,7 +80,9 @@ public class MainActivity extends Activity {
     @Click
     public void showLocation(View view){
         if(tracker == null){
-            tracker = TrackerFactory.createTracker(this);
+            IRoomsParser parser = RoomsParserFactory.createHomeParser();
+            tracker = TrackerFactory.createTracker(this, parser);
+
         }
 
         int duration = Toast.LENGTH_SHORT;
