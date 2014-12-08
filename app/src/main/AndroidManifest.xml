@@ -29,5 +29,7 @@
                 android:label="@string/activity_settings"
                 android:parentActivityName=".MainActivity_">
         </activity>
+        <service android:name=".service.ListeningService">
+        </service>
     </application>
 </manifest>

@@ -1,11 +1,15 @@
 package cz.cvut.uhlirad1.homemyo;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 import cz.cvut.uhlirad1.homemyo.knx.AdapterFactory;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
@@ -14,6 +18,7 @@ import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
 import cz.cvut.uhlirad1.homemyo.localization.*;
+import cz.cvut.uhlirad1.homemyo.service.ListeningService;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
@@ -21,6 +26,8 @@ import org.androidannotations.annotations.EActivity;
 public class MainActivity extends Activity {
 
     ITracker tracker;
+
+    Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +38,23 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        serviceIntent = new Intent(this, ListeningService.class);
+
+        // TODO: Když Service skončí Switch by se měl přepnout do původní polohy (v případě že to nebylo vyvoláno uživatelem)
+        Switch serviceSwitch = (Switch) menu.findItem(R.id.action_layout_switch_daemon).getActionView().findViewById(R.id.action_service_switch);
+        serviceSwitch.setChecked(isListeningServiceRunning());
+        serviceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    startService(serviceIntent);
+                }else{
+                    stopService(serviceIntent);
+                }
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -93,5 +115,15 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
         toast.show();
+    }
+
+    private boolean isListeningServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (ListeningService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

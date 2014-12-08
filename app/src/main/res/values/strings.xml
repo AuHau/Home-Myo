@@ -8,7 +8,7 @@
     <string name="pref_knx_category">KNX communication</string>
     <string name="pref_knx_ip">IP address</string>
     <string name="pref_knx_port">Port number</string>
-    <string name="pref_loc_enabled">Localization turned on/off</string>
+    <string name="pref_loc_enabled">Localization enabled</string>
     <string name="activity_settings">Settings</string>
 
 </resources>

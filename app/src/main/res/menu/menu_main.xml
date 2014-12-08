@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
     <item
-            android:id="@+id/action_switch_daemon"
+            android:id="@+id/action_layout_switch_daemon"
             android:title=""
             android:showAsAction="always"
             android:actionLayout="@layout/switch_layout"
