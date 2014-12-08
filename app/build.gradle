@@ -21,6 +21,13 @@ repositories {
 
 dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
+    repositories {
+        maven {
+            url 'libs/myorepository'
+        }
+    }
+
+    compile('com.thalmic:myosdk:0.8.+@aar')
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
