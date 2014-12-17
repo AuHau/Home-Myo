@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cz.cvut.uhlirad1.homemyo"
           android:versionCode="1"
-          android:versionName="1.0">
+          android:versionName="0.5git add">
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21"/>
+    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="21"/>
 
     // Required for communicating with the Myo device
     <uses-permission android:name="android.permission.BLUETOOTH" />

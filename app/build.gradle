@@ -27,7 +27,7 @@ dependencies {
         }
     }
 
-    compile('com.thalmic:myosdk:0.8.+@aar')
+    compile('com.thalmic:myosdk:0.9.+@aar')
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
@@ -46,10 +46,10 @@ android {
 
     defaultConfig {
         applicationId "cz.cvut.uhlirad1.homemyo"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "0.5"
     }
     buildTypes {
         release {
