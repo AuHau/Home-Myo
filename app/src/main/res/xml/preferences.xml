@@ -23,4 +23,12 @@
                 android:title="@string/pref_loc_enabled"
                 android:defaultValue="@bool/default_loc_enabled"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Myo"
+        android:key="myo_category">
+        <Preference android:title="Connect Myo">
+            <intent android:action="ScanActivity"></intent>
+        </Preference>
+
+    </PreferenceCategory>
 </PreferenceScreen>

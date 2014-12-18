@@ -32,4 +32,12 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/turnOnAll"
             android:layout_alignEnd="@+id/turnOnAll"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan for Myo"
+            android:id="@+id/scan"
+            android:layout_below="@+id/showLocation"
+            android:layout_centerHorizontal="true"/>
 </RelativeLayout>

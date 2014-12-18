@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
+import com.thalmic.myo.Hub;
+import com.thalmic.myo.scanner.ScanActivity;
 import cz.cvut.uhlirad1.homemyo.knx.AdapterFactory;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.knx.KnxDataTypeEnum;
@@ -70,6 +72,18 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Click
+    public void scan(View view){
+        Hub hub = Hub.getInstance();
+        if (!hub.init(this, getPackageName())) {
+            Toast.makeText(this, "Couldn't initialize Hub", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        Intent intent = new Intent(this, ScanActivity.class);
+        startActivity(intent);
     }
 
     @Click

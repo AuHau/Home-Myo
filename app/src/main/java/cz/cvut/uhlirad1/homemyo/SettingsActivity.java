@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
+import com.thalmic.myo.Hub;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -22,6 +24,14 @@ public class SettingsActivity extends Activity {
             PrefsFragment mPrefsFragment = new PrefsFragment();
             mFragmentTransaction.replace(android.R.id.content, mPrefsFragment);
             mFragmentTransaction.commit();
+
+            // Hub has to be initialized so ScanActivity would work
+            Hub hub = Hub.getInstance();
+            if (!hub.init(this, getPackageName())) {
+                Toast.makeText(this, "Couldn't initialize Hub", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
         }
 
         public static class PrefsFragment extends PreferenceFragment {

@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cz.cvut.uhlirad1.homemyo"
           android:versionCode="1"
-          android:versionName="0.5git add">
+          android:versionName="0.5">
 
     <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="21"/>
+
+    <uses-feature
+            android:name="android.hardware.bluetooth_le"
+            android:required="true" />
 
     // Required for communicating with the Myo device
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -29,7 +33,13 @@
                 android:label="@string/activity_settings"
                 android:parentActivityName=".MainActivity_">
         </activity>
-        <service android:name=".service.ListeningService">
-        </service>
+
+        <activity
+                android:name="com.thalmic.myo.scanner.ScanActivity"
+                android:label="@string/myosdk__title_activity_scan"
+                android:parentActivityName=".SettingsActivity">
+        </activity>
+
+        <service android:name=".service.ListeningService"></service>
     </application>
 </manifest>
