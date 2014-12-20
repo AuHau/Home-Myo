@@ -25,30 +25,6 @@ public class ListeningService extends Service {
     private Toast mToast;
     private DeviceListener mListener;
 
-    private void makeNotification(){
-        Intent notifyIntent = new Intent(this, MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
-
-        Notification n  = new Notification.Builder(this)
-                .setContentTitle("Home Myo is running")
-                .setContentText("We are watching for your gestures!")
-                .setSmallIcon(R.drawable.ic_stat_notify)
-                .setContentIntent(pIntent)
-                .setAutoCancel(false)
-                .build();
-        n.flags = Notification.FLAG_ONGOING_EVENT;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0, n);
-    }
-
-    private void destroyNotification(){
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(0);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -62,7 +38,7 @@ public class ListeningService extends Service {
 
         hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
 
-        mListener = new MyoListener();
+        mListener = new MyoListener(this);
         hub.addListener(mListener);
 
         if (hub.getConnectedDevices().isEmpty()) {
@@ -99,6 +75,32 @@ public class ListeningService extends Service {
 
         destroyNotification();
     }
+
+    private void makeNotification(){
+        Intent notifyIntent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
+
+        Notification n  = new Notification.Builder(this)
+                .setContentTitle("Home Myo is running")
+                .setContentText("We are watching for your gestures!")
+                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setAutoCancel(false)
+                .setContentIntent(pIntent)
+                .setOngoing(true)
+                .setPriority(Notification.PRIORITY_LOW)
+                .build();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, n);
+    }
+
+    private void destroyNotification(){
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+    }
+
 
     private void showToast(String text) {
         Log.w(TAG, text);

@@ -27,6 +27,11 @@ dependencies {
         }
     }
 
+    compile('org.simpleframework:simple-xml:2.7.+'){
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
     compile('com.thalmic:myosdk:0.9.+@aar')
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile fileTree(dir: 'libs', include: ['*.jar'])
