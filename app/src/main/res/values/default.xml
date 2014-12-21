@@ -3,4 +3,5 @@
     <string name="default_knx_ip">192.168.1.11</string>
     <bool name="default_loc_enabled">false</bool>
     <integer name="default_knx_port">1111</integer>
+    <integer name="default_lock_time">3</integer>
 </resources>

@@ -1,4 +1,4 @@
-package cz.cvut.uhlirad1.homemyo;
+package cz.cvut.uhlirad1.homemyo.settings;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 import com.thalmic.myo.Hub;
+import cz.cvut.uhlirad1.homemyo.R;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>

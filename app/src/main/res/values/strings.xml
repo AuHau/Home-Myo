@@ -10,5 +10,6 @@
     <string name="pref_knx_port">Port number</string>
     <string name="pref_loc_enabled">Localization enabled</string>
     <string name="activity_settings">Settings</string>
+    <string name="pref_lock_time">Lock timeout</string>
 
 </resources>

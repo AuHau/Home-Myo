@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService;
+import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
@@ -35,6 +37,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // TODO: Kontrolovat Room Combos, zdali se nepřekrývají s All Combos (ty by se v některých místnosti tedy nemohli zpustit). Což by nemuselo být na škodu, ale uživatel by o tom měl vědět.
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("LOCK_TIME", 2);
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("knx_port", 100);
     }
 
 

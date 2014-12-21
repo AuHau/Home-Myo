@@ -28,6 +28,7 @@ public class ListeningService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        // TODO: Předělat běh MyoListeneru do vlastního threadu
 
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
@@ -41,6 +42,7 @@ public class ListeningService extends Service {
         mListener = new MyoListener(this);
         hub.addListener(mListener);
 
+        // TODO: Automatický connect k známému Myo (ukládání zpárovaného Myo; ukládat posledního známého)
         if (hub.getConnectedDevices().isEmpty()) {
             String myoAddress = PreferenceManager.getDefaultSharedPreferences(this).getString("myo_mac", "");
             // If we have a saved Myo MAC address then connect to it, otherwise look for one nearby.

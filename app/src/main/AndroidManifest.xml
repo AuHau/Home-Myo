@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="cz.cvut.uhlirad1.homemyo.SettingsActivity"
+                android:name=".settings.SettingsActivity"
                 android:label="@string/activity_settings"
                 android:parentActivityName=".MainActivity_">
         </activity>
@@ -37,7 +37,7 @@
         <activity
                 android:name="com.thalmic.myo.scanner.ScanActivity"
                 android:label="@string/myosdk__title_activity_scan"
-                android:parentActivityName=".SettingsActivity">
+                android:parentActivityName=".settings.SettingsActivity">
         </activity>
 
         <service android:name=".service.ListeningService"></service>

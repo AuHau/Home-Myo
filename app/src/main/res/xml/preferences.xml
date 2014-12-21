@@ -19,7 +19,7 @@
             android:title="Localization"
             android:key="loc_category">
         <CheckBoxPreference
-                android:key="loc_enabled"
+                android:key="LOC_ENABLED"
                 android:title="@string/pref_loc_enabled"
                 android:defaultValue="@bool/default_loc_enabled"/>
     </PreferenceCategory>
@@ -27,8 +27,12 @@
         android:title="Myo"
         android:key="myo_category">
         <Preference android:title="Connect Myo">
-            <intent android:action="ScanActivity"></intent>
+            <intent android:action="com.thalmic.myo.scanner.ScanActivity"></intent>
         </Preference>
-
+        <EditTextPreference
+                android:key="LOCK_TIME"
+                android:title="@string/pref_lock_time"
+                android:numeric="integer"
+                android:defaultValue="@integer/default_lock_time"/>
     </PreferenceCategory>
 </PreferenceScreen>
