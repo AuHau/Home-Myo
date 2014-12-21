@@ -36,7 +36,7 @@ public class ListeningService extends Service {
             return;
         }
 
-        hub.setLockingPolicy(Hub.LockingPolicy.STANDARD);
+        hub.setLockingPolicy(Hub.LockingPolicy.NONE);
 
         mListener = new MyoListener(this);
         hub.addListener(mListener);
@@ -45,7 +45,7 @@ public class ListeningService extends Service {
             String myoAddress = PreferenceManager.getDefaultSharedPreferences(this).getString("myo_mac", "");
             // If we have a saved Myo MAC address then connect to it, otherwise look for one nearby.
             if (TextUtils.isEmpty(myoAddress)) {
-                hub.attachToAdjacentMyo();
+//                hub.attachToAdjacentMyo();
             } else {
                 hub.attachByMacAddress(myoAddress);
             }

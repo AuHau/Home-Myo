@@ -18,7 +18,7 @@ public class DummyCommandsParser implements ICommandsParser {
 
         LinkedList<Command> commands = new LinkedList<Command>();
         commands.add(new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHT));
-        commands.add(new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.DOOR));
+        commands.add(new Command(2, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.BLINDS));
 
         return commands;
     }

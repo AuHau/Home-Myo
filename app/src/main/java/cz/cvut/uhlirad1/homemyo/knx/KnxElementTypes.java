@@ -5,9 +5,11 @@ package cz.cvut.uhlirad1.homemyo.knx;
  * Date: 3.12.14
  */
 public enum KnxElementTypes {
+    CENTRAL_FUNCTION,
     LIGHT,
-    DOOR,
-    BLIND,
-    POWER_PLUG,
-    HEATER;
+    BLINDS,
+    MEASURED_VALUES,
+    TEMPERATURE,
+    ALARM_SYSTEM,
+    SOCKET
 }

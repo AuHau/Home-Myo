@@ -22,7 +22,8 @@ public final class AdapterFactory{
         // return new CatAdapter("192.168.88.252", 3671);
 
         String ip = preferences.getString("knx_ip", context.getString(R.string.default_knx_ip));
-        int port = preferences.getInt("knx_port", context.getResources().getInteger(R.integer.default_knx_port));
+//        int port = preferences.getInt("knx_port", 1111);
+        int port = 111;
 
         return new CatAdapter(ip, port);
     }

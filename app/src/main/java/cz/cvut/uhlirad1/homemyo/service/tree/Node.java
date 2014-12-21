@@ -16,27 +16,29 @@ public class Node {
 
     private Command command;
 
-    private Map<Pose, Node> childs;
+    private Map<Pose, Node> childrens;
 
     public Node() {
+        childrens = new HashMap<Pose, Node>();
     }
 
     public Node(Pose pose) {
         this.pose = pose;
+        childrens = new HashMap<Pose, Node>();
     }
 
     public Node(Pose pose, Command command) {
         this.pose = pose;
         this.command = command;
-        childs = new HashMap<Pose, Node>();
+        childrens = new HashMap<Pose, Node>();
     }
 
     public void addChild(Pose pose, Node node){
-        childs.put(pose, node);
+        childrens.put(pose, node);
     }
 
     public Node getChild(Pose pose){
-        return childs.get(pose);
+        return childrens.get(pose);
     }
 
     public boolean hasCommand(){

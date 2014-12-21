@@ -2,6 +2,7 @@ package cz.cvut.uhlirad1.homemyo.knx.cat;
 
 import android.os.AsyncTask;
 import cz.cvut.uhlirad1.homemyo.knx.IAdapter;
+import cz.cvut.uhlirad1.homemyo.knx.ITelegram;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,14 +24,14 @@ public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements
     }
 
     @Override
-    public boolean sendTelegram(CatTelegram catTelegram) throws IllegalStateException {
+    public boolean sendTelegram(ITelegram telegram) throws IllegalStateException {
         try {
             Socket socket = new Socket(serverIpAddress, serverPortNumber);
 
             OutputStream out = socket.getOutputStream();
             PrintWriter output = new PrintWriter(out);
 
-            output.println(catTelegram.assembleTelegram());
+            output.println(telegram.assembleTelegram());
             output.flush(); out.close();
 
             socket.close();

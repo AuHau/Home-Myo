@@ -28,14 +28,14 @@ public class TreeParser {
     public Map<Integer, Node> parse(File config){
         Serializer serializer = new Persister();
 
+        Rooms rooms = null;
         try {
-            Rooms rooms = serializer.read(Rooms.class, config);
-            return mapRooms(rooms);
+            rooms = serializer.read(Rooms.class, config);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
+        Map<Integer,Node> map = mapRooms(rooms);
+        return map;
     }
 
     private Map<Integer, Node> mapRooms(Rooms rooms){

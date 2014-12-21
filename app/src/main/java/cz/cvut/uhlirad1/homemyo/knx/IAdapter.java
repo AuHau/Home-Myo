@@ -15,11 +15,11 @@ public interface IAdapter {
      * If telegram doesn't have bound Command, IllegalStateException will
      * be thrown.
      *
-     * @param catTelegram
+     * @param telegram
      * @throws IllegalStateException
      * @return
      */
-    public boolean sendTelegram(CatTelegram catTelegram) throws IllegalStateException;
+    public boolean sendTelegram(ITelegram telegram) throws IllegalStateException;
 
 
 }
