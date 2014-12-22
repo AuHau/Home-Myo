@@ -22,14 +22,18 @@ import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService;
+import cz.cvut.uhlirad1.homemyo.service.ListeningService_;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 @EActivity
 public class MainActivity extends Activity {
 
-    ITracker tracker;
+    @Pref
+    protected AppPreferences_ preferences;
 
     Intent serviceIntent;
 
@@ -49,7 +53,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        serviceIntent = new Intent(this, ListeningService.class);
+        serviceIntent = new Intent(this, ListeningService_.class);
 
         // TODO: Když Service skončí Switch by se měl přepnout do původní polohy (v případě že to nebylo vyvoláno uživatelem)
         Switch serviceSwitch = (Switch) menu.findItem(R.id.action_layout_switch_daemon).getActionView().findViewById(R.id.action_service_switch);
@@ -83,65 +87,13 @@ public class MainActivity extends Activity {
 
     @Click
     public void scan(View view){
-        Hub hub = Hub.getInstance();
-        if (!hub.init(this, getPackageName())) {
-            Toast.makeText(this, "Couldn't initialize Hub", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-        Intent intent = new Intent(this, ScanActivity.class);
-        startActivity(intent);
-    }
-
-    @Click
-    public void turnOnAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHT);
-
-        CatTelegram telegram = new CatTelegram();
-        telegram.setCommand(command);
-        telegram.setBoolean(true);
-
-        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter(this);
-
-        adapter.execute(telegram);
-    }
-
-    @Click
-    public void turnOffAll(View view){
-        Command command = new Command(1, "Example", "Example", "3/1/11", KnxDataTypeEnum.BOOLEAN, KnxElementTypes.LIGHT);
-
-        CatTelegram telegram = new CatTelegram();
-        telegram.setCommand(command);
-        telegram.setBoolean(false);
-
-        CatAdapter adapter = (CatAdapter) AdapterFactory.createAdapter(this);
-
-        adapter.execute(telegram);
-    }
-
-    @Click
-    public void showLocation(View view){
-        if(tracker == null){
-            IRoomsParser parser = RoomsParserFactory.createHomeParser();
-            tracker = TrackerFactory.createTracker(this, parser);
-
-        }
-
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = null;
-        try {
-            toast = Toast.makeText(this, tracker.getLocation(false).getName(), duration);
-        } catch (TrackerException e) {
-            e.printStackTrace();
-        }
-        toast.show();
+        Toast.makeText(this, preferences.knxIp().get(), Toast.LENGTH_SHORT).show();
     }
 
     private boolean isListeningServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (ListeningService.class.getName().equals(service.service.getClassName())) {
+            if (ListeningService_.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }

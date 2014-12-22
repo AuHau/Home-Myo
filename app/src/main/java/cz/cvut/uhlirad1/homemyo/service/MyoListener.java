@@ -1,20 +1,21 @@
 package cz.cvut.uhlirad1.homemyo.service;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
-import cz.cvut.uhlirad1.homemyo.R;
-import cz.cvut.uhlirad1.homemyo.settings.SettingsKeys;
 import cz.cvut.uhlirad1.homemyo.knx.*;
-import cz.cvut.uhlirad1.homemyo.localization.*;
+import cz.cvut.uhlirad1.homemyo.localization.ITracker;
+import cz.cvut.uhlirad1.homemyo.localization.Room;
+import cz.cvut.uhlirad1.homemyo.localization.TrackerException;
+import cz.cvut.uhlirad1.homemyo.localization.TrackerFactory;
 import cz.cvut.uhlirad1.homemyo.service.tree.Node;
 import cz.cvut.uhlirad1.homemyo.service.tree.TreeParser;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.*;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 17.12.14
  */
+@EBean
 public class MyoListener extends AbstractDeviceListener {
 
     private IAdapter adapter;
@@ -32,13 +34,10 @@ public class MyoListener extends AbstractDeviceListener {
 
     private Map<Integer, Node> trees;
 
-    private boolean isLocalizationEnabled;
-
-    private long lockingTime;
+    @Pref
+    protected AppPreferences_ preferences;
 
     //////////////////////////////////
-
-    private long comboStartTimestamp;
 
     private Node actualRoomNode;
 
@@ -50,7 +49,6 @@ public class MyoListener extends AbstractDeviceListener {
 
     private Handler handler ;
 
-
     public MyoListener(Context context) {
 
         locked = true;
@@ -60,25 +58,63 @@ public class MyoListener extends AbstractDeviceListener {
 
         List<Command> commands = CommandsParserFactory.createCommandsParser().parse();
 
+        try {
+            FileOutputStream f = new FileOutputStream(config);
+            PrintWriter pw = new PrintWriter(f);
+            pw.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "\n" +
+                    "<rooms>\n" +
+                    "    <room id=\"0\">\n" +
+                    "        <command id=\"1\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "            <myoPose type=\"FINGERS_SPREAD\"></myoPose>\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"1\">\n" +
+                    "        <command id=\"2\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "        <command id=\"6\">\n" +
+                    "            <myoPose type=\"WAVE_OUT\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"5\">\n" +
+                    "        <command id=\"6\">\n" +
+                    "            <myoPose type=\"WAVE_OUT\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"2\">\n" +
+                    "        <command id=\"5\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"3\">\n" +
+                    "        <command id=\"4\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"4\">\n" +
+                    "        <command id=\"3\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "</rooms>");
+            pw.flush();
+            pw.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         TreeParser treeParser = new TreeParser(commands);
         trees = treeParser.parse(config);
 
         adapter = AdapterFactory.createAdapter(context);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-
-        isLocalizationEnabled = preferences.getBoolean(SettingsKeys.LOC_ENABLED.toString(),
-                resources.getBoolean(R.bool.default_loc_enabled));
-
-        // TODO: Opravit preference - možná zkusit použít AA?
-//        lockingTime = preferences.getInt(SettingsKeys.LOCK_TIME.toString(),
-//                resources.getInteger(R.integer.default_lock_time)) * 1000;
-        lockingTime = resources.getInteger(R.integer.default_lock_time) * 1000;
-//        lockingTime = preferences.getInt("LOCK_TIME", 2) * 1000;
-
-        if (isLocalizationEnabled)
-            tracker = TrackerFactory.createTracker(context, RoomsParserFactory.createHomeParser());
+        tracker = TrackerFactory.createTracker(context);
     }
 
     @Override
@@ -111,7 +147,7 @@ public class MyoListener extends AbstractDeviceListener {
 
         // New combo
         if (actualAllNode == null && actualRoomNode == null) {
-            if (isLocalizationEnabled) {
+            if (preferences.locEnabled().get()) {
                 try {
                     Room room = tracker.getLocation();
                     actualRoomNode = trees.get(room.getId());
@@ -178,13 +214,13 @@ public class MyoListener extends AbstractDeviceListener {
         vibrateUnlock(myo);
 
         currentLock = new LockingRunnable(myo);
-        handler.postDelayed(currentLock, lockingTime);
+        handler.postDelayed(currentLock, preferences.lockTimeout().get() * 1000);
     }
 
     private void postponeLock(){
         if(currentLock == null) return;
         handler.removeCallbacks(currentLock);
-        handler.postDelayed(currentLock, lockingTime);
+        handler.postDelayed(currentLock, preferences.lockTimeout().get() * 1000);
     }
 
     private void lock(Myo myo){

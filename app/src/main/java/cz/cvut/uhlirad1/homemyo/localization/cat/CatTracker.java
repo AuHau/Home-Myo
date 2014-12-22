@@ -6,6 +6,9 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import cz.cvut.uhlirad1.homemyo.localization.*;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.HashMap;
 
@@ -13,7 +16,11 @@ import java.util.HashMap;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 3.12.14
  */
+@EBean
 public class CatTracker implements ITracker {
+
+    @Pref
+    protected AppPreferences_ preferences;
 
     private HashMap<String, Room> mapping;
 
@@ -23,24 +30,17 @@ public class CatTracker implements ITracker {
     private String TRACKER_APP_PREFERENCE_NAME = "sharedRoom";
     private String TRACKER_APP_PREFERENCE_KEY = "room";
 
-    public CatTracker(IRoomsParser parser, Context context) {
+    public CatTracker(Context context) {
+        IRoomsParser parser = RoomsParserFactory.createParser();
         mapping = parser.parseMapping();
         try {
             Context trackerAppContext = context.createPackageContext(TRACKER_APP_PACKAGE, 0);
             trackerAppPreferences = trackerAppContext.getSharedPreferences(TRACKER_APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         } catch (PackageManager.NameNotFoundException e) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("loc_enabled", false);
+            preferences.locEnabled().put(false);
             e.printStackTrace();
         }
-    }
-
-    public CatTracker(IRoomsParser parser, Context context, String trackerAppPackage, String trackerAppPrefName, String trackerAppPrefKey){
-        this(parser, context);
-
-        TRACKER_APP_PACKAGE = trackerAppPackage;
-        TRACKER_APP_PREFERENCE_NAME = trackerAppPrefName;
-        TRACKER_APP_PREFERENCE_KEY = trackerAppPrefKey;
     }
 
     @Override

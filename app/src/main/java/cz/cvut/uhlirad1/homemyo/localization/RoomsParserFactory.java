@@ -10,7 +10,7 @@ public final class RoomsParserFactory {
 
     private RoomsParserFactory(){}
 
-    public static IRoomsParser createHomeParser(){
+    public static IRoomsParser createParser(){
         return new DummyRoomsParser();
     }
 

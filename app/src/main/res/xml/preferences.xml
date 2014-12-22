@@ -5,34 +5,35 @@
             android:title="@string/pref_knx_category"
             android:key="knx_category">
         <EditTextPreference
-                android:key="knx_ip"
+                android:key="knxIp"
+                android:dialogMessage="Enter IP address of Switchboard"
                 android:title="@string/pref_knx_ip"
-                android:defaultValue="@string/default_knx_ip"
                 />
         <EditTextPreference
-                android:key="knx_port"
+                android:key="knxPort"
+                android:dialogMessage="Enter port number of Switchboard"
                 android:title="@string/pref_knx_port"
-                android:numeric="integer"
-                android:defaultValue="@integer/default_knx_port"/>
+                android:numeric="integer"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Localization"
             android:key="loc_category">
         <CheckBoxPreference
-                android:key="LOC_ENABLED"
-                android:title="@string/pref_loc_enabled"
-                android:defaultValue="@bool/default_loc_enabled"/>
+                android:key="locEnabled"
+                android:title="@string/pref_loc_enabled"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Myo"
         android:key="myo_category">
         <Preference android:title="Connect Myo">
-            <intent android:action="com.thalmic.myo.scanner.ScanActivity"></intent>
+            <intent android:action="android.intent.action.VIEW"
+                    android:targetPackage="cz.cvut.uhlirad1.homemyo"
+                    android:targetClass="com.thalmic.myo.scanner.ScanActivity"/>
         </Preference>
         <EditTextPreference
-                android:key="LOCK_TIME"
-                android:title="@string/pref_lock_time"
-                android:numeric="integer"
-                android:defaultValue="@integer/default_lock_time"/>
+                android:key="lockTimeout"
+                android:dialogMessage="Enter time which application will wait before relocking Myo"
+                android:title="@string/pref_lock_timeout"
+                android:numeric="integer"/>
     </PreferenceCategory>
 </PreferenceScreen>

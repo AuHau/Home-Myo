@@ -18,7 +18,7 @@ public final class Home {
     }
 
     private static void parseRooms() {
-        IRoomsParser parser = RoomsParserFactory.createHomeParser();
+        IRoomsParser parser = RoomsParserFactory.createParser();
         rooms = parser.parse();
     }
 }

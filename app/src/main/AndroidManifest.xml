@@ -34,12 +34,9 @@
                 android:parentActivityName=".MainActivity_">
         </activity>
 
-        <activity
-                android:name="com.thalmic.myo.scanner.ScanActivity"
-                android:label="@string/myosdk__title_activity_scan"
-                android:parentActivityName=".settings.SettingsActivity">
-        </activity>
+        <activity android:name="com.thalmic.myo.scanner.ScanActivity"
+                  android:parentActivityName=".settings.SettingsActivity"/>
 
-        <service android:name=".service.ListeningService"></service>
+        <service android:name=".service.ListeningService_"/>
     </application>
 </manifest>

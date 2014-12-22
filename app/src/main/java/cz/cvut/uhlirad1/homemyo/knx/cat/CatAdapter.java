@@ -3,6 +3,9 @@ package cz.cvut.uhlirad1.homemyo.knx.cat;
 import android.os.AsyncTask;
 import cz.cvut.uhlirad1.homemyo.knx.IAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.ITelegram;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,22 +17,22 @@ import java.util.HashMap;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 3.12.14
  */
-public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements IAdapter {
+@EBean
+public class CatAdapter implements IAdapter {
 
-    private String serverIpAddress;
-    private int serverPortNumber;
+    @Pref
+    protected AppPreferences_ preferences;
+
     private HashMap<Integer, Boolean> states;
 
-    public CatAdapter(String serverIpAddress, int serverPortNumber) {
-        this.serverIpAddress = serverIpAddress;
-        this.serverPortNumber = serverPortNumber;
+    public CatAdapter() {
         states = new HashMap<Integer, Boolean>();
     }
 
     @Override
     public boolean sendTelegram(ITelegram telegram) throws IllegalStateException {
         try {
-            Socket socket = new Socket(serverIpAddress, serverPortNumber);
+            Socket socket = new Socket(preferences.knxIp().get(), preferences.knxPort().get());
 
             OutputStream out = socket.getOutputStream();
             PrintWriter output = new PrintWriter(out);
@@ -59,8 +62,4 @@ public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements
         return states.get(commandId);
     }
 
-    @Override
-    protected Boolean doInBackground(CatTelegram... params) {
-        return sendTelegram(params[0]);
-    }
 }

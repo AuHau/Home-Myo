@@ -8,23 +8,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.*;
 import android.os.Process;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 import com.thalmic.myo.*;
 import cz.cvut.uhlirad1.homemyo.MainActivity;
 import cz.cvut.uhlirad1.homemyo.R;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EService;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 8.12.14
  */
+@EService
 public class ListeningService extends Service {
 
     private static final String TAG = "ListeningService";
     private Toast mToast;
-    private DeviceListener mListener;
+
+    @Bean
+    protected MyoListener listener;
+
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
 
@@ -61,7 +65,7 @@ public class ListeningService extends Service {
     public void onDestroy() {
         showToast("Stop watching for Myo gestures");
 
-        Hub.getInstance().removeListener(mListener);
+        Hub.getInstance().removeListener(listener);
         Hub.getInstance().shutdown();
 
         destroyNotification();
@@ -125,8 +129,8 @@ public class ListeningService extends Service {
             hub.setLockingPolicy(Hub.LockingPolicy.NONE);
 
             // TODO: Notifikace pro uživatele když neni Myo synchronizováno
-            mListener = new MyoListener(context);
-            hub.addListener(mListener);
+            listener = MyoListener_.getInstance_(context);
+            hub.addListener(listener);
 
             // TODO: Automatický connect k známému Myo (ukládání zpárovaného Myo; ukládat posledního známého)
             // TODO: Automatický connect jenom v případě, že jsem na domácí WiFi

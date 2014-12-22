@@ -2,6 +2,7 @@ package cz.cvut.uhlirad1.homemyo.localization;
 
 import android.content.Context;
 import cz.cvut.uhlirad1.homemyo.localization.cat.CatTracker;
+import cz.cvut.uhlirad1.homemyo.localization.cat.CatTracker_;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -16,7 +17,7 @@ public final class TrackerFactory {
     private TrackerFactory() {
     }
 
-    public static ITracker createTracker(Context context, IRoomsParser parser){
-        return new CatTracker(parser, context);
+    public static ITracker createTracker(Context context){
+        return CatTracker_.getInstance_(context);
     }
 }
