@@ -50,10 +50,12 @@ public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements
         // TODO: Opravdické ověřování stavu z KNX sítě
         int commandId = telegram.getCommand().getId();
         if(!states.containsKey(commandId)){
-            states.put(commandId, false);
-            return false;
+            states.put(commandId, true);
+            return true;
         }
 
+        boolean aBoolean = states.get(commandId);
+        states.put(commandId, !aBoolean);
         return states.get(commandId);
     }
 
