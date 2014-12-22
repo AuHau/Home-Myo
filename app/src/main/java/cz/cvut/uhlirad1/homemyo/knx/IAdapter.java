@@ -21,5 +21,15 @@ public interface IAdapter {
      */
     public boolean sendTelegram(ITelegram telegram) throws IllegalStateException;
 
+    /**
+     * Method will require state of element specified by Command in telegram.
+     * Since state can be expressed with many types (depends on type of element),
+     * return value is generally Object and it is up to developer to type cast
+     * to proper type.
+     *
+     * @param telegram
+     * @return
+     */
+    public Object getState(ITelegram telegram);
 
 }

@@ -8,6 +8,7 @@ public interface ITelegram {
 
     public String assembleTelegram();
     public void setCommand(Command command);
+    public Command getCommand();
     public void setBoolean(boolean data) throws IllegalStateException;
     public void setFloat(float data) throws IllegalStateException;
     public void setTime(String data) throws IllegalStateException;

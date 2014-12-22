@@ -54,6 +54,11 @@ public class CatTelegram implements ITelegram {
         this.command = command;
     }
 
+    @Override
+    public Command getCommand() {
+        return command;
+    }
+
     public void setBoolean(boolean data) throws IllegalStateException {
         if(dataSet) throw new IllegalStateException("Data were already set");
 

@@ -60,6 +60,46 @@ public class MyoListener extends AbstractDeviceListener {
 
         List<Command> commands = CommandsParserFactory.createCommandsParser().parse();
 
+        try {
+            FileOutputStream f = new FileOutputStream(config);
+            PrintWriter pw = new PrintWriter(f);
+            pw.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "\n" +
+                    "<rooms>\n" +
+                    "    <room id=\"0\">\n" +
+                    "        <command id=\"1\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "            <myoPose type=\"WAVE_OUT\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "        <command id=\"2\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "            <myoPose type=\"FINGERS_SPREAD\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "    <room id=\"1\">\n" +
+                    "        <command id=\"1\">\n" +
+                    "            <myoPose type=\"FIST\"></myoPose>\n" +
+                    "            <myoPose type=\"WAVE_OUT\"></myoPose>\n" +
+                    "            <myoPose type=\"WAVE_IN\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "        <command id=\"1\">\n" +
+                    "            <myoPose type=\"WAVE_IN\"></myoPose>\n" +
+                    "            <myoPose type=\"WAVE_OUT\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "        <command id=\"1\">\n" +
+                    "            <myoPose type=\"WAVE_IN\"></myoPose>\n" +
+                    "        </command>\n" +
+                    "    </room>\n" +
+                    "</rooms>");
+            pw.flush();
+            pw.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         TreeParser treeParser = new TreeParser(commands);
         trees = treeParser.parse(config);
 
@@ -167,8 +207,8 @@ public class MyoListener extends AbstractDeviceListener {
     private void sendCommand(Command command) {
         ITelegram telegram = TelegramFactory.createTelegram();
         telegram.setCommand(command);
-        // TODO: Musím zjistit jaká je současná hodnota, abych poslal tu druhou
-        telegram.setBoolean(true);
+        // TODO: Přetypování podle typu v Commandu a né brutefore na Boolean
+        telegram.setBoolean((Boolean) adapter.getState(telegram));
         adapter.sendTelegram(telegram);
     }
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -17,10 +18,12 @@ public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements
 
     private String serverIpAddress;
     private int serverPortNumber;
+    private HashMap<Integer, Boolean> states;
 
     public CatAdapter(String serverIpAddress, int serverPortNumber) {
         this.serverIpAddress = serverIpAddress;
         this.serverPortNumber = serverPortNumber;
+        states = new HashMap<Integer, Boolean>();
     }
 
     @Override
@@ -40,6 +43,18 @@ public class CatAdapter extends AsyncTask<CatTelegram, Void, Boolean> implements
         }
 
         return false;
+    }
+
+    @Override
+    public Object getState(ITelegram telegram) {
+        // TODO: Opravdické ověřování stavu z KNX sítě
+        int commandId = telegram.getCommand().getId();
+        if(!states.containsKey(commandId)){
+            states.put(commandId, false);
+            return false;
+        }
+
+        return states.get(commandId);
     }
 
     @Override
