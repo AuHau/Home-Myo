@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.*;
 import android.os.Process;
@@ -24,34 +25,18 @@ public class ListeningService extends Service {
     private static final String TAG = "ListeningService";
     private Toast mToast;
     private DeviceListener mListener;
+    private Looper mServiceLooper;
+    private ServiceHandler mServiceHandler;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // TODO: Předělat běh MyoListeneru do vlastního threadu
 
-        Hub hub = Hub.getInstance();
-        if (!hub.init(this, getPackageName())) {
-            showToast("Couldn't initialize Hub");
-            stopSelf();
-            return;
-        }
-
-        hub.setLockingPolicy(Hub.LockingPolicy.NONE);
-
-        mListener = new MyoListener(this);
-        hub.addListener(mListener);
-
-        // TODO: Automatický connect k známému Myo (ukládání zpárovaného Myo; ukládat posledního známého)
-        if (hub.getConnectedDevices().isEmpty()) {
-            String myoAddress = PreferenceManager.getDefaultSharedPreferences(this).getString("myo_mac", "");
-            // If we have a saved Myo MAC address then connect to it, otherwise look for one nearby.
-            if (TextUtils.isEmpty(myoAddress)) {
-//                hub.attachToAdjacentMyo();
-            } else {
-                hub.attachByMacAddress(myoAddress);
-            }
-        }
+        HandlerThread thread = new HandlerThread("MyoListener",
+                Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+        mServiceLooper = thread.getLooper();
+        mServiceHandler = new ServiceHandler(mServiceLooper, this);
     }
 
     @Override
@@ -59,6 +44,10 @@ public class ListeningService extends Service {
         showToast("Watching for Myo gestures");
 
         makeNotification();
+
+        Message msg = mServiceHandler.obtainMessage();
+        msg.arg1 = startId;
+        mServiceHandler.sendMessage(msg);
 
         return START_STICKY;
     }
@@ -112,5 +101,45 @@ public class ListeningService extends Service {
             mToast.setText(text);
         }
         mToast.show();
+    }
+
+    private final class ServiceHandler extends Handler {
+
+        private Context context;
+
+        public ServiceHandler(Looper looper, Context context) {
+            super(looper);
+            this.context = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            Hub hub = Hub.getInstance();
+            if (!hub.init(context, getPackageName())) {
+                showToast("Couldn't initialize Hub");
+                stopSelf();
+                return;
+            }
+
+            hub.setLockingPolicy(Hub.LockingPolicy.NONE);
+
+            // TODO: Notifikace pro uživatele když neni Myo synchronizováno
+            mListener = new MyoListener(context);
+            hub.addListener(mListener);
+
+            // TODO: Automatický connect k známému Myo (ukládání zpárovaného Myo; ukládat posledního známého)
+            // TODO: Automatický connect jenom v případě, že jsem na domácí WiFi
+            if (hub.getConnectedDevices().isEmpty()) {
+//                String myoAddress = PreferenceManager.getDefaultSharedPreferences(context).getString("myo_mac", "");
+                // If we have a saved Myo MAC address then connect to it, otherwise look for one nearby.
+//                if (TextUtils.isEmpty(myoAddress)) {
+//                hub.attachToAdjacentMyo();
+//                } else {
+//                    hub.attachByMacAddress(myoAddress);
+                    hub.attachByMacAddress("CE:CD:53:B4:7C:DA");
+//                }
+            }
+        }
     }
 }
