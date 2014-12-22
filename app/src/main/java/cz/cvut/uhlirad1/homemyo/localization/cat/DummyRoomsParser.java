@@ -14,10 +14,10 @@ import java.util.List;
 public class DummyRoomsParser implements IRoomsParser {
 
     private HashMap<String, Room> mapping;
+    private List<Room> list;
 
-    @Override
-    public List<Room> parse(){
-        ArrayList list = new ArrayList<Room>(5);
+    public DummyRoomsParser() {
+        list = new ArrayList<Room>(5);
         Room r0 = new Room(0, "Celý byt");
         Room r1 = new Room(1, "Zasedačka (304a)");
         Room r2 = new Room(2, "Kuchyně (304b)");
@@ -31,15 +31,21 @@ public class DummyRoomsParser implements IRoomsParser {
         list.add(r2.getId(), r2);
         list.add(r3.getId(), r3);
         list.add(r4.getId(), r4);
+        list.add(r5.getId(), r5);
 
 
         mapping = new HashMap<String, Room>();
         mapping.put("304a", r1);
         mapping.put("304b", r2);
         mapping.put("304c", r3);
-        mapping.put("Chodba", r4);
+        mapping.put("304d", r4);
+        mapping.put("304d", r4);
+        mapping.put("chodba", r5);
 
+    }
 
+    @Override
+    public List<Room> parse(){
         return list;
     }
 
