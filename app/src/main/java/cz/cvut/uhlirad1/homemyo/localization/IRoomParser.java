@@ -2,11 +2,12 @@ package cz.cvut.uhlirad1.homemyo.localization;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adam on 3.12.14.
  */
-public interface IRoomsParser {
+public interface IRoomParser {
     /**
      * Method will parse Rooms specification and return List of Rooms
      * @return
@@ -22,5 +23,5 @@ public interface IRoomsParser {
      *
      * @return
      */
-    public HashMap parseMapping();
+    public Map<String, Room> parseMapping();
 }

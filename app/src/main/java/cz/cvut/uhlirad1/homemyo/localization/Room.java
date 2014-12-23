@@ -21,11 +21,11 @@ public final class Room{
     @Element(required = false)
     private String name;
 
-    @Element(required = false)
-    private int order;
-
     @ElementList(required = false, inline = true)
     private List<Command> command;
+
+    @Element(required = false)
+    private String mapping;
 
     public Room() {
     }
@@ -33,19 +33,7 @@ public final class Room{
     public Room(int id, String name) {
         this.id = id;
         this.name = name;
-        order = id;
         command = null;
-    }
-
-    public Room(int id, String name, int order, List<Command> command) {
-        this.id = id;
-        this.name = name;
-        this.order = order;
-        this.command = command;
-    }
-
-    public int getOrder() {
-        return order;
     }
 
     public int getId() {
@@ -68,11 +56,15 @@ public final class Room{
         this.name = name;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
     public void setCommand(List<Command> command) {
         this.command = command;
+    }
+
+    public String getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(String mapping) {
+        this.mapping = mapping;
     }
 }

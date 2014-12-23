@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
 
         // TODO: Kontrolovat Room Combos, zdali se nepřekrývají s All Combos (ty by se v některých místnosti tedy nemohli zpustit). Což by nemuselo být na škodu, ale uživatel by o tom měl vědět.
 
+        // TODO: Zkontrolovat jestli existují Configy pro Rooms a Commands
+
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("LOCK_TIME", 2);
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("knx_port", 100);
     }
@@ -84,12 +86,7 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Click
-    public void scan(View view){
-        Toast.makeText(this, preferences.knxIp().get(), Toast.LENGTH_SHORT).show();
-    }
-
+    
     private boolean isListeningServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

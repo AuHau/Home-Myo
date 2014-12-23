@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -22,7 +22,7 @@ public class CatTracker implements ITracker {
     @Pref
     protected AppPreferences_ preferences;
 
-    private HashMap<String, Room> mapping;
+    private Map<String, Room> mapping;
 
     private SharedPreferences trackerAppPreferences;
 
@@ -31,7 +31,7 @@ public class CatTracker implements ITracker {
     private String TRACKER_APP_PREFERENCE_KEY = "room";
 
     public CatTracker(Context context) {
-        IRoomsParser parser = RoomsParserFactory.createParser();
+        IRoomParser parser = RoomParserFactory.createParser(context);
         mapping = parser.parseMapping();
         try {
             Context trackerAppContext = context.createPackageContext(TRACKER_APP_PACKAGE, 0);

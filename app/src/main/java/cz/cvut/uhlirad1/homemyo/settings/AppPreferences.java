@@ -10,19 +10,29 @@ import org.androidannotations.annotations.sharedpreferences.*;
 @SharedPref(value=SharedPref.Scope.UNIQUE)
 public interface AppPreferences {
 
-    @DefaultString("192.168.1.11")
-    String knxIp();
-
-    // KNX Settings
-
     @DefaultFloat(0.0f)
     float appVersion();
+
+    @DefaultString("Home Myo")
+    String applicationName();
+
+    @DefaultString("HomeMyo")
+    String applicationFolder();
+
+    @DefaultString("rooms.xml")
+    String roomConfig();
+
+    @DefaultString("commands.xml")
+    String commandConfig();
+
+    // KNX Settings
+    @DefaultString("192.168.1.11")
+    String knxIp();
 
     @DefaultInt(1111)
     int knxPort();
 
     // Localization settings
-
     @DefaultBoolean(false)
     boolean locEnabled();
 
@@ -31,7 +41,6 @@ public interface AppPreferences {
 
 
     // Myo settings
-
     @DefaultInt(3)
     int lockTimeout();
 

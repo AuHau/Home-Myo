@@ -1,22 +1,22 @@
 package cz.cvut.uhlirad1.homemyo.localization.cat;
 
-import cz.cvut.uhlirad1.homemyo.localization.IRoomsParser;
+import cz.cvut.uhlirad1.homemyo.localization.IRoomParser;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adam on 1.12.14.
  */
-// TODO: Implementovat XML parser
-public class DummyRoomsParser implements IRoomsParser {
+public class DummyRoomParser implements IRoomParser {
 
     private HashMap<String, Room> mapping;
     private List<Room> list;
 
-    public DummyRoomsParser() {
+    public DummyRoomParser() {
         list = new ArrayList<Room>(5);
         Room r0 = new Room(0, "Celý byt");
         Room r1 = new Room(1, "Zasedačka (304a)");
@@ -50,8 +50,7 @@ public class DummyRoomsParser implements IRoomsParser {
     }
 
     @Override
-    public HashMap parseMapping() {
-        // TODO: Přepsat tak, aby nepadalo v případě že předtím nebylo zavoláno parse()
+    public Map parseMapping() {
         return mapping;
     }
 }
