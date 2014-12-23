@@ -11,6 +11,5 @@ public enum KnxElementTypes {
     MEASURED_VALUES,
     TEMPERATURE,
     ALARM_SYSTEM,
-    SOCKET,
-    DOOR
+    SOCKET
 }

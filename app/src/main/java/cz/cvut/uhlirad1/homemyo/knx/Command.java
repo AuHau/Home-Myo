@@ -12,11 +12,14 @@ import java.util.List;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 3.12.14
  */
-@Root
+@Root(name = "emp", strict = false)
 public class Command {
 
     @Attribute
     private int id;
+
+    @Attribute(required = false)
+    private boolean display;
 
     @Element(required = false)
     private String name;
@@ -24,13 +27,13 @@ public class Command {
     @Element(required = false)
     private String description;
 
-    @Element(required = false)
+    @Element(name = "graddress",required = false)
     private String address;
 
-    @Element(required = false)
+    @Element(name = "knxtype",required = false)
     private KnxDataTypeEnum dataType;
 
-    @Element(required = false)
+    @Element(name = "type", required = false)
     private KnxElementTypes elementType;
 
     @ElementList(required = false, inline = true)
@@ -79,10 +82,6 @@ public class Command {
         return dataType;
     }
 
-    public KnxElementTypes getElementsType() {
-        return elementType;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -117,6 +116,18 @@ public class Command {
 
     public void setMyoPose(List<MyoPose> myoPose) {
         this.myoPose = myoPose;
+    }
+
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
+    }
+
+    public KnxElementTypes getElementType() {
+        return elementType;
     }
 
     @Override

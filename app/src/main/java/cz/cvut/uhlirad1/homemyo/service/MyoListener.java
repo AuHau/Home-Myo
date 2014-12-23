@@ -56,7 +56,7 @@ public class MyoListener extends AbstractDeviceListener {
 
         File config = new File(context.getExternalFilesDir(null), "tree.xml");
 
-        List<Command> commands = CommandsParserFactory.createCommandsParser().parse();
+        List<Command> commands = CommandsParserFactory.createCommandsParser(context).parse();
 
         TreeParser treeParser = new TreeParser(commands);
         trees = treeParser.parse(config);
@@ -109,7 +109,6 @@ public class MyoListener extends AbstractDeviceListener {
             }
 
             actualAllNode = trees.get(0);
-            // TODO: Přidat možnost způsobu potvrzování comb - Double tapem / timeoutem
         } else if (pose == Pose.DOUBLE_TAP) { // Combo is confirmed, perform command if it is bind
             if ((actualRoomNode != null && actualRoomNode.hasCommand()) ||
                     (actualAllNode!= null && actualAllNode.hasCommand())) {

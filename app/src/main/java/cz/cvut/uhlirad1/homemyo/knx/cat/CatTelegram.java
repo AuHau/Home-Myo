@@ -33,7 +33,7 @@ public class CatTelegram implements ITelegram {
 
     private String getData(){
         switch (command.getDataType()){
-            case BOOLEAN:
+            case BOOL:
                 return String.valueOf(booleanData);
 
             case DATE:

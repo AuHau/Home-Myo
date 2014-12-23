@@ -5,7 +5,7 @@ package cz.cvut.uhlirad1.homemyo.knx;
  * Date: 3.12.14
  */
 public enum KnxDataTypeEnum {
-    BOOLEAN,
+    BOOL,
 
     FLOAT,
 
@@ -13,5 +13,5 @@ public enum KnxDataTypeEnum {
 
     DATE,
 
-    TIME;
+    TIME
 }
