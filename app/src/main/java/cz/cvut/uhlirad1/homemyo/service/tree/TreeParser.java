@@ -1,10 +1,8 @@
 package cz.cvut.uhlirad1.homemyo.service.tree;
 
-import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
-import cz.cvut.uhlirad1.homemyo.service.tree.Node;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -52,12 +50,12 @@ public class TreeParser {
         Node root = new Node();
         map.put(room.getId(), root);
 
-        for(Command command : room.getCommand()){
-            processCommand(root, command.getId(), command.getMyoPose());
+        for(Combo combo : room.getCombo()){
+            processCombo(root, combo.getCommandId(), combo.getMyoPose());
         }
     }
 
-    private void processCommand(Node tree, int commandId, List<MyoPose> poses){
+    private void processCombo(Node tree, int commandId, List<MyoPose> poses){
 
         // All poses have been already applied, save command
         if(poses.size() == 0){
@@ -68,11 +66,11 @@ public class TreeParser {
         // If there is already existing Node with pose, follow that path otherwise create new Node
         Pose pose = poses.remove(0).getType();
         if(tree.getChild(pose) != null){
-            processCommand(tree.getChild(pose), commandId, poses);
+            processCombo(tree.getChild(pose), commandId, poses);
         }else{
             Node node = new Node(pose);
             tree.addChild(pose, node);
-            processCommand(node, commandId, poses);
+            processCombo(node, commandId, poses);
         }
     }
 

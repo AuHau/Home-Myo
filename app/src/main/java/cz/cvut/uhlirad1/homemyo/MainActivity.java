@@ -1,7 +1,6 @@
 package cz.cvut.uhlirad1.homemyo;
 
-import android.app.Activity;
-import android.app.ActivityManager;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.thalmic.myo.Hub;
@@ -30,7 +30,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 @EActivity
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 
     @Pref
     protected AppPreferences_ preferences;
@@ -46,10 +46,17 @@ public class MainActivity extends Activity {
 
         // TODO: Zkontrolovat jestli existují Configy pro Rooms a Commands
 
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("LOCK_TIME", 2);
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("knx_port", 100);
+        setListAdapter(new ComboAdapter(this, preferences.treeConfig().get()));
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        ComboAdapter.Item item = (ComboAdapter.Item) getListAdapter().getItem(position);
+        Toast.makeText(this, "You cliked on Combo with ID - " + item.getComboId(), Toast.LENGTH_SHORT).show();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

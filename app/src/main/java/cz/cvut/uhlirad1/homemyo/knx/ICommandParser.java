@@ -6,6 +6,6 @@ import java.util.List;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 4.12.14
  */
-public interface ICommandsParser {
+public interface ICommandParser {
     public List<Command> parse();
 }

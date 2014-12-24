@@ -25,6 +25,9 @@ public class Command {
     private String name;
 
     @Element(required = false)
+    private String userName;
+
+    @Element(required = false)
     private String description;
 
     @Element(name = "graddress",required = false)
@@ -128,6 +131,14 @@ public class Command {
 
     public KnxElementTypes getElementType() {
         return elementType;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override

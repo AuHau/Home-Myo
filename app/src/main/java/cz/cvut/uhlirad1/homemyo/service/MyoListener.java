@@ -54,9 +54,9 @@ public class MyoListener extends AbstractDeviceListener {
         locked = true;
         handler = new Handler();
 
-        File config = new File(context.getExternalFilesDir(null), "tree.xml");
+        File config = new File(context.getExternalFilesDir(null), preferences.treeConfig().get());
 
-        List<Command> commands = CommandsParserFactory.createCommandsParser(context).parse();
+        List<Command> commands = CommandParserFactory.createCommandParser(context).parse();
 
         TreeParser treeParser = new TreeParser(commands);
         trees = treeParser.parse(config);

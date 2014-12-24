@@ -19,6 +19,9 @@ public interface AppPreferences {
     @DefaultString("HomeMyo")
     String applicationFolder();
 
+    @DefaultString("tree.xml")
+    String treeConfig();
+
     @DefaultString("rooms.xml")
     String roomConfig();
 

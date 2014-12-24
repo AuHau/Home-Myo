@@ -1,6 +1,7 @@
 package cz.cvut.uhlirad1.homemyo.localization;
 
 import cz.cvut.uhlirad1.homemyo.knx.Command;
+import cz.cvut.uhlirad1.homemyo.service.tree.Combo;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -22,7 +23,7 @@ public final class Room{
     private String name;
 
     @ElementList(required = false, inline = true)
-    private List<Command> command;
+    private List<Combo> combo;
 
     @Element(required = false)
     private String mapping;
@@ -33,7 +34,7 @@ public final class Room{
     public Room(int id, String name) {
         this.id = id;
         this.name = name;
-        command = null;
+        combo = null;
     }
 
     public int getId() {
@@ -44,8 +45,8 @@ public final class Room{
         return name;
     }
 
-    public List<Command> getCommand() {
-        return command;
+    public List<Combo> getCombo() {
+        return combo;
     }
 
     public void setId(int id) {
@@ -56,8 +57,8 @@ public final class Room{
         this.name = name;
     }
 
-    public void setCommand(List<Command> command) {
-        this.command = command;
+    public void setCombo(List<Combo> combo) {
+        this.combo = combo;
     }
 
     public String getMapping() {

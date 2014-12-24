@@ -1,7 +1,7 @@
 package cz.cvut.uhlirad1.homemyo.knx.cat;
 
 import cz.cvut.uhlirad1.homemyo.knx.Command;
-import cz.cvut.uhlirad1.homemyo.knx.ICommandsParser;
+import cz.cvut.uhlirad1.homemyo.knx.ICommandParser;
 import cz.cvut.uhlirad1.homemyo.knx.KnxDataTypeEnum;
 import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 7.12.14
  */
-public class DummyCommandsParser implements ICommandsParser {
+public class DummyCommandParser implements ICommandParser {
     @Override
     public List<Command> parse() {
 

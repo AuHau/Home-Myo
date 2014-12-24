@@ -3,7 +3,7 @@ package cz.cvut.uhlirad1.homemyo.knx.cat;
 import android.os.Environment;
 import android.util.Log;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
-import cz.cvut.uhlirad1.homemyo.knx.ICommandsParser;
+import cz.cvut.uhlirad1.homemyo.knx.ICommandParser;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
@@ -19,7 +19,7 @@ import java.util.*;
  * Date: 23.12.14
  */
 @EBean
-public class XMLCommandParser implements ICommandsParser {
+public class XMLCommandParser implements ICommandParser {
 
     @Pref
     AppPreferences_ preferences;
@@ -66,7 +66,7 @@ public class XMLCommandParser implements ICommandsParser {
     /**
      * Method for checking consistency of parsed data.
      * In case of some error XMLCommandParserException will be raised.
-     * 
+     *
      * @throws XMLCommandParserException
      */
     private void checkData() throws XMLCommandParserException {
