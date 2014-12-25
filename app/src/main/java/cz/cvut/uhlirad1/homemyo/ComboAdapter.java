@@ -113,11 +113,11 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
             ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
             icon.setImageResource(combo.getType().getIconResource());
 
-            int i = 0;
+            int i = 2;
             ImageView gestureView;
             ViewGroup.LayoutParams params;
             for (MyoPose pose : combo.getPoses()) {
-                if (i > 2) break;
+                if (i < 0) break;
 
                 if(isNew){
                     params = text.getLayoutParams();
@@ -126,7 +126,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
                     text.setLayoutParams(params);
                 }
 
-                gestureView = (ImageView) convertView.findViewById(gestureViews[i++]);
+                gestureView = (ImageView) convertView.findViewById(gestureViews[i--]);
                 gestureView.setImageResource(pose.getIconResource());
             }
         } else {
