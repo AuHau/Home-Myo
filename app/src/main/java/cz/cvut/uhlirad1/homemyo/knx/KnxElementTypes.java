@@ -15,8 +15,8 @@ public enum KnxElementTypes {
     ALARM_SYSTEM,
     SOCKET;
 
-    public static int getIconResource(KnxElementTypes type) {
-        switch (type) {
+    public int getIconResource() {
+        switch (this) {
             case CENTRAL_FUNCTION:
                 return R.drawable.ic_center;
             case LIGHT:
@@ -31,6 +31,27 @@ public enum KnxElementTypes {
                 return R.drawable.ic_temp;
             default:
                 return 0;
+        }
+    }
+
+    public String toNiceString() {
+        switch (this) {
+            case CENTRAL_FUNCTION:
+                return "Central function";
+            case LIGHT:
+                return "Light";
+            case TEMPERATURE:
+                return "Temperature";
+            case SOCKET:
+                return "Socket";
+            case MEASURED_VALUES:
+                return "Measured values";
+            case ALARM_SYSTEM:
+                return "Alarm system";
+            case BLINDS:
+                return "Blinds";
+            default:
+                return "";
         }
     }
 }

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cz.cvut.uhlirad1.homemyo"
-          android:versionCode="1"
-          android:versionName="0.5">
+    package="cz.cvut.uhlirad1.homemyo"
+    android:versionCode="1"
+    android:versionName="0.5" >
 
-    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="21"/>
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="21" />
 
     <uses-feature
-            android:name="android.hardware.bluetooth_le"
-            android:required="true" />
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <!-- Required for communicating with the Myo device -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -17,32 +19,43 @@
     <!-- Required for sending usage data to Thalmic Labs -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-
-    <!-- Reading configurations of Rooms and Commands-->
+    <!-- Reading configurations of Rooms and Commands -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-            android:label="@string/app_name"
-            android:icon="@drawable/ic_launcher">
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
         <activity
-                android:name="cz.cvut.uhlirad1.homemyo.MainActivity_"
-                android:label="@string/app_name">
+            android:name="cz.cvut.uhlirad1.homemyo.MainActivity_"
+            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".settings.SettingsActivity"
-                android:label="@string/activity_settings"
-                android:parentActivityName=".MainActivity_">
+            android:name="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity"
+            android:label="@string/activity_settings"
+            android:parentActivityName="cz.cvut.uhlirad1.homemyo.MainActivity_" >
         </activity>
+        <activity
+            android:name="com.thalmic.myo.scanner.ScanActivity"
+            android:parentActivityName="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity" />
 
-        <activity android:name="com.thalmic.myo.scanner.ScanActivity"
-                  android:parentActivityName=".settings.SettingsActivity"/>
+        <service android:name="cz.cvut.uhlirad1.homemyo.service.ListeningService_" />
 
-        <service android:name=".service.ListeningService_"/>
+        <activity
+            android:name="cz.cvut.uhlirad1.homemyo.DetailActivity_"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName="cz.cvut.uhlirad1.homemyo.MainActivity_" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.cvut.uhlirad1.homemyo.MainActivity_" />
+        </activity>
     </application>
+
 </manifest>

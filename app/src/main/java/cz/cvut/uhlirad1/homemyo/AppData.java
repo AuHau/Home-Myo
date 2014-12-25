@@ -41,6 +41,7 @@ public class AppData {
 
     private IRoomParser roomParser;
     private ICommandParser commandParser;
+    private TreeParser treeParser;
 
     @Pref
     protected AppPreferences_ preferences;
@@ -58,8 +59,8 @@ public class AppData {
 
         File treeConfig = getTreeConfig();
         if (treeConfig != null) {
-            TreeParser parser = new TreeParser(commands);
-            rootRooms = parser.parse(treeConfig);
+            treeParser = new TreeParser();
+            rootRooms = treeParser.parse(treeConfig);
             rootTree = new HashMap<Integer, Node>();
             transferListToTree();
         }
@@ -141,7 +142,7 @@ public class AppData {
     public void commitTree(){
         File config = getTreeConfig();
         if (config != null) {
-            commandParser.save(config, commands);
+            treeParser.save(config, rootRooms);
             transferListToTree();
         }
     }
@@ -164,6 +165,25 @@ public class AppData {
             }
         }
         return null;
+    }
+
+    public void removeCombo(int id) {
+        int pos, foundPosition = -1;
+        for (Room room : rootRooms) {
+            pos = 0;
+
+            for (Combo combo : room.getCombo()) {
+                if (combo.getId() == id) {
+                    foundPosition = pos;
+                    break;
+                }
+            }
+
+            if(foundPosition >= 0){
+                room.getCombo().remove(foundPosition);
+                break;
+            }
+        }
     }
 
     private Room findRoom(int id, Map<Integer, Room> roomMap) {

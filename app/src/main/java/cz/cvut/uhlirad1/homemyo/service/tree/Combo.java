@@ -1,6 +1,7 @@
 package cz.cvut.uhlirad1.homemyo.service.tree;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -20,7 +21,10 @@ public class Combo {
     @Attribute(name = "command_id")
     private int commandId;
 
-    @ElementList(inline = true, required = false, name = "myo-pose")
+    @Element(required = false)
+    private String name;
+
+    @ElementList(inline = true, name = "myo-pose")
     private List<MyoPose> myoPose;
 
 
@@ -30,6 +34,14 @@ public class Combo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCommandId() {

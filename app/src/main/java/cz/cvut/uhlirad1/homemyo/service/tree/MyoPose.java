@@ -17,6 +17,27 @@ public class MyoPose {
     public MyoPose() {
     }
 
+    public String toNiceString() {
+        switch (type) {
+            case WAVE_IN:
+                return "Wave in";
+            case WAVE_OUT:
+                return "Wave out";
+            case FIST:
+                return "Fist";
+            case FINGERS_SPREAD:
+                return "Fingers spread";
+            case DOUBLE_TAP:
+                return "Double tap";
+            case REST:
+                return "Rest";
+            case UNKNOWN:
+                return "Unknown";
+            default:
+                return "";
+        }
+    }
+
     public Pose getType() {
         return type;
     }

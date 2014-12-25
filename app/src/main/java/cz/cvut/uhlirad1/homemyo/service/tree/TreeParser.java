@@ -18,12 +18,6 @@ import java.util.Map;
  */
 public class TreeParser {
 
-    private Map<Integer, Command> commands;
-
-    public TreeParser(Map<Integer, Command> commands) {
-        this.commands = commands;
-    }
-
     public List<Room> parse(File config){
         Serializer serializer = new Persister();
 
@@ -44,9 +38,11 @@ public class TreeParser {
             return;
         }
 
+        Rooms rooms1 = new Rooms();
+        rooms1.setRoom(rooms);
         Serializer serializer = new Persister();
         try {
-            serializer.write(rooms, config);
+            serializer.write(rooms1, config);
         } catch (Exception e) {
             // TODO: Error Handling
             Log.e("TreeParser", "Saving Tree was unsuccessful!");

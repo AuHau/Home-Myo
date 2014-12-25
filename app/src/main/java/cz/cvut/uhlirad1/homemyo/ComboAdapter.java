@@ -111,7 +111,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
         if (!combo.isRoom()) {
             ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
-            icon.setImageResource(KnxElementTypes.getIconResource(combo.getType()));
+            icon.setImageResource(combo.getType().getIconResource());
 
             int i = 0;
             ImageView gestureView;
@@ -171,19 +171,21 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
     private List<Item> convertTree(List<Room> tree, Map<Integer, Room> rooms, Map<Integer, Command> commands) {
         LinkedList<Item> list = new LinkedList<Item>();
         Command tmpCommand;
+        int roomId;
 
         for (Room treeRoom : tree) {
             if (treeRoom.getCombo() == null || treeRoom.getCombo().isEmpty()) continue;
 
             list.add(new Item(rooms.get(treeRoom.getId()).getName()));
+            roomId = treeRoom.getId();
 
             for (Combo treeCombo : treeRoom.getCombo()) {
                 tmpCommand = commands.get(treeCombo.getCommandId());
 
-                if (tmpCommand.getUserName() == null || tmpCommand.getUserName().isEmpty())
-                    list.add(new Item(treeCombo.getId(), tmpCommand.getName(), tmpCommand.getElementType(), treeCombo.getMyoPose()));
+                if (treeCombo.getName() == null || treeCombo.getName().isEmpty())
+                    list.add(new Item(treeCombo.getId(), roomId, tmpCommand.getName(), tmpCommand.getElementType(), treeCombo.getMyoPose()));
                 else
-                    list.add(new Item(treeCombo.getId(), tmpCommand.getUserName(), tmpCommand.getElementType(), treeCombo.getMyoPose()));
+                    list.add(new Item(treeCombo.getId(), roomId, treeCombo.getName(), tmpCommand.getElementType(), treeCombo.getMyoPose()));
             }
         }
 
@@ -196,19 +198,25 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
         private String name;
         private List<MyoPose> poses;
         private int comboId;
+        private int roomId;
         private boolean isRoom;
 
-        public Item(int comboId, String name, KnxElementTypes type, List<MyoPose> poses) {
+        public Item(int comboId, int roomId, String name, KnxElementTypes type, List<MyoPose> poses) {
             this.type = type;
             this.name = name;
             this.poses = poses;
             this.comboId = comboId;
+            this.roomId = roomId;
             this.isRoom = false;
         }
 
         public Item(String name) {
             this.name = name;
             this.isRoom = true;
+        }
+
+        public int getRoomId() {
+            return roomId;
         }
 
         public int getComboId() {

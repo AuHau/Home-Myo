@@ -58,8 +58,7 @@ public class MainActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
 
         ComboAdapter.Item item = (ComboAdapter.Item) getListAdapter().getItem(position);
-        Toast.makeText(this, "You cliked on Combo with ID - " + item.getComboId(), Toast.LENGTH_SHORT).show();
-
+        DetailActivity_.intent(this).comboId(item.getComboId()).start();
     }
 
     @Override
