@@ -22,7 +22,6 @@
     <!-- Reading configurations of Rooms and Commands -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -55,6 +54,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.cvut.uhlirad1.homemyo.MainActivity_" />
+        </activity>
+        <activity
+            android:name="cz.cvut.uhlirad1.homemyo.AddActivity_"
+            android:label="@string/title_activity_add"
+            android:parentActivityName="cz.cvut.uhlirad1.homemyo.MainActivity_" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="cz.cvut.uhlirad1.homemyo.MainActivity_" />
         </activity>
     </application>
 

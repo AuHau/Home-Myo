@@ -11,7 +11,7 @@ public interface IAdapter {
     /**
      * Method will send telegram into KNX network.
      * Data can be bind through set* methods of Telegram, if no data
-     * will be bind, method will send empty command.
+     * will be bind, method will send empty spinnerCommand.
      * If telegram doesn't have bound Command, IllegalStateException will
      * be thrown.
      *

@@ -27,6 +27,15 @@ public class Combo {
     @ElementList(inline = true, name = "myo-pose")
     private List<MyoPose> myoPose;
 
+    public Combo() {
+    }
+
+    public Combo(int id, int commandId, String name, List<MyoPose> myoPose) {
+        this.id = id;
+        this.commandId = commandId;
+        this.name = name;
+        this.myoPose = myoPose;
+    }
 
     public int getId() {
         return id;

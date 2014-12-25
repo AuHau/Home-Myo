@@ -16,5 +16,6 @@
     <string name="title_activity_detail">Detail</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="title_activity_add">Add combo</string>
 
 </resources>

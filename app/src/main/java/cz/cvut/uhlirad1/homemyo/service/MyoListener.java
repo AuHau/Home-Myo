@@ -114,7 +114,7 @@ public class MyoListener extends AbstractDeviceListener {
             }
 
             actualAllNode = trees.get(0);
-        } else if (pose == Pose.DOUBLE_TAP) { // Combo is confirmed, perform command if it is bind
+        } else if (pose == Pose.DOUBLE_TAP) { // Combo is confirmed, perform spinnerCommand if it is bind
             if ((actualRoomNode != null && actualRoomNode.hasCommand()) ||
                     (actualAllNode!= null && actualAllNode.hasCommand())) {
 
@@ -125,11 +125,11 @@ public class MyoListener extends AbstractDeviceListener {
                     commandToPerform = actualAllNode.getCommand();
                 sendCommand(commandToPerform);
 
-                Log.i("MyoListener", "Combo detected, command '" + commandToPerform.getName() + "' will be executed");
+                Log.i("MyoListener", "Combo detected, spinnerCommand '" + commandToPerform.getName() + "' will be executed");
                 vibrateConfirmationCombo(myo);
                 lock(myo, false);
             } else {
-                Log.d("MyoListener", "Confirmed combo doesn't have bind command");
+                Log.d("MyoListener", "Confirmed combo doesn't have bind spinnerCommand");
                 vibrateCommandNotFound(myo);
                 lock(myo, false);
             }
@@ -143,8 +143,8 @@ public class MyoListener extends AbstractDeviceListener {
         if(actualAllNode != null)
             actualAllNode = actualAllNode.getChild(pose);
 
-        if (actualRoomNode == null && actualAllNode == null) { // Pose not in tree, command not found - reset combo
-            Log.d("MyoListener", "Performed pose is not leading to any command");
+        if (actualRoomNode == null && actualAllNode == null) { // Pose not in tree, spinnerCommand not found - reset combo
+            Log.d("MyoListener", "Performed pose is not leading to any spinnerCommand");
             vibrateCommandNotFound(myo);
             lock(myo, false);
         } else {

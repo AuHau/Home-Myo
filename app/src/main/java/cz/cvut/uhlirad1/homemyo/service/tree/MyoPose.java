@@ -5,6 +5,10 @@ import cz.cvut.uhlirad1.homemyo.R;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 20.12.14
@@ -15,6 +19,10 @@ public class MyoPose {
     Pose type;
 
     public MyoPose() {
+    }
+
+    public MyoPose(Pose pose) {
+        type = pose;
     }
 
     public String toNiceString() {
@@ -61,5 +69,41 @@ public class MyoPose {
             default:
                 return 0;
         }
+    }
+
+    public static MyoPose createMyoPoseFromIconResource(int resource) {
+        MyoPose pose = new MyoPose();
+
+        switch (resource) {
+            case R.drawable.ic_gest_double_tap:
+                pose.setType(Pose.DOUBLE_TAP);
+                break;
+            case R.drawable.ic_gest_spread:
+                pose.setType(Pose.FINGERS_SPREAD);
+                break;
+            case R.drawable.ic_gest_fist:
+                pose.setType(Pose.FIST);
+                break;
+            case R.drawable.ic_get_in:
+                pose.setType(Pose.WAVE_IN);
+                break;
+            case R.drawable.ic_gest_out:
+                pose.setType(Pose.WAVE_OUT);
+                break;
+        }
+
+        return pose;
+    }
+
+    public static List<MyoPose> getArray() {
+        List<MyoPose> list = new ArrayList<MyoPose>();
+
+//        list.add(new MyoPose(Pose.DOUBLE_TAP));
+        list.add(new MyoPose(Pose.FINGERS_SPREAD));
+        list.add(new MyoPose(Pose.FIST));
+        list.add(new MyoPose(Pose.WAVE_IN));
+        list.add(new MyoPose(Pose.WAVE_OUT));
+
+        return list;
     }
 }

@@ -43,6 +43,8 @@ public class AppData {
     private ICommandParser commandParser;
     private TreeParser treeParser;
 
+    private int highestComboId = Integer.MIN_VALUE;
+
     @Pref
     protected AppPreferences_ preferences;
 
@@ -168,7 +170,7 @@ public class AppData {
     }
 
     public void removeCombo(int id) {
-        int pos, foundPosition = -1;
+        int pos, roomPos = 0, deleteRoom = -1, foundPosition = -1;
         for (Room room : rootRooms) {
             pos = 0;
 
@@ -180,10 +182,30 @@ public class AppData {
             }
 
             if(foundPosition >= 0){
-                room.getCombo().remove(foundPosition);
+                if(room.getCombo().size() == 1){
+                    deleteRoom = roomPos;
+                }else{
+                    room.getCombo().remove(foundPosition);
+                }
                 break;
             }
+
+            roomPos++;
         }
+
+        if (deleteRoom >= 0) {
+            rootRooms.remove(deleteRoom);
+        }
+    }
+
+    public void addCombo(Combo combo, int roomId) {
+        for (Room room : rootRooms) {
+            if (room.getId() == roomId) room.getCombo().add(combo);
+        }
+    }
+
+    public int getHighestComboIdAndRaise() {
+        return ++highestComboId;
     }
 
     private Room findRoom(int id, Map<Integer, Room> roomMap) {
@@ -214,6 +236,7 @@ public class AppData {
         map.put(room.getId(), root);
 
         for(Combo combo : room.getCombo()){
+            if(combo.getId() > highestComboId) highestComboId = combo.getId();
             processCombo(root, combo.getCommandId(), combo.getMyoPose(), 0);
         }
     }

@@ -1,16 +1,12 @@
 package cz.cvut.uhlirad1.homemyo;
 
 import android.app.Activity;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import com.thalmic.myo.Myo;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.service.tree.Combo;
 import cz.cvut.uhlirad1.homemyo.service.tree.MyoPose;
@@ -69,7 +65,7 @@ public class DetailActivity extends Activity {
         commandType.setText(command.getElementType().toNiceString());
 
         // TODO: Zprovoznit zobrazení ikonky u typu elementu
-//        commandTypeIcon.setImageResource(command.getElementType().getIconResource());
+//        commandTypeIcon.setImageResource(spinnerCommand.getElementType().getIconResource());
 
         int i = 0;
         TextView number, name;
@@ -109,7 +105,7 @@ public class DetailActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.actionSettings) {
             return true;
         }
 

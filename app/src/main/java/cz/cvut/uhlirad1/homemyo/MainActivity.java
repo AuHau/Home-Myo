@@ -4,30 +4,18 @@ import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.Toast;
-import com.thalmic.myo.Hub;
-import com.thalmic.myo.scanner.ScanActivity;
-import cz.cvut.uhlirad1.homemyo.knx.AdapterFactory;
-import cz.cvut.uhlirad1.homemyo.knx.Command;
-import cz.cvut.uhlirad1.homemyo.knx.KnxDataTypeEnum;
-import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;
-import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
-import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
-import cz.cvut.uhlirad1.homemyo.localization.*;
-import cz.cvut.uhlirad1.homemyo.service.ListeningService;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService_;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 @EActivity
@@ -84,17 +72,16 @@ public class MainActivity extends ListActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                Intent intent = new Intent();
-                intent.setClass(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-        }
+    @OptionsItem
+    public void actionSettings() {
+        Intent intent = new Intent();
+        intent.setClass(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 
-        return super.onOptionsItemSelected(item);
+    @OptionsItem
+    public void actionAdd() {
+        AddActivity_.intent(this).start();
     }
     
     private boolean isListeningServiceRunning() {
