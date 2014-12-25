@@ -6,6 +6,7 @@ import android.util.Log;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
+import cz.cvut.uhlirad1.homemyo.AppData;
 import cz.cvut.uhlirad1.homemyo.knx.*;
 import cz.cvut.uhlirad1.homemyo.localization.ITracker;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
@@ -14,7 +15,10 @@ import cz.cvut.uhlirad1.homemyo.localization.TrackerFactory;
 import cz.cvut.uhlirad1.homemyo.service.tree.Node;
 import cz.cvut.uhlirad1.homemyo.service.tree.TreeParser;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.*;
@@ -37,6 +41,12 @@ public class MyoListener extends AbstractDeviceListener {
     @Pref
     protected AppPreferences_ preferences;
 
+    @Bean
+    protected AppData data;
+
+    @RootContext
+    protected Context context;
+
     //////////////////////////////////
 
     private Node actualRoomNode;
@@ -49,17 +59,12 @@ public class MyoListener extends AbstractDeviceListener {
 
     private Handler handler ;
 
-    public MyoListener(Context context) {
-
+    @AfterInject
+    public void init() {
         locked = true;
         handler = new Handler();
 
-        File config = new File(context.getExternalFilesDir(null), preferences.treeConfig().get());
-
-        List<Command> commands = CommandParserFactory.createCommandParser(context).parse();
-
-        TreeParser treeParser = new TreeParser(commands);
-        trees = treeParser.parse(config);
+        trees = data.getRootTree();
 
         adapter = AdapterFactory.createAdapter(context);
 

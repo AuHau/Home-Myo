@@ -1,5 +1,6 @@
 package cz.cvut.uhlirad1.homemyo.localization;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public interface IRoomParser {
      * Method will parse Rooms specification and return List of Rooms
      * @return
      */
-    public List<Room> parse();
+    public Map<Integer, Room> parse(File config);
 
     /**
      * Since Localization can be implemented several ways, mapping of
@@ -24,4 +25,6 @@ public interface IRoomParser {
      * @return
      */
     public Map<String, Room> parseMapping();
+
+    public void save(File config, Map<Integer,Room> rooms);
 }

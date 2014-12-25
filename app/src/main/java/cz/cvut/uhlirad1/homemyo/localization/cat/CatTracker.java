@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import cz.cvut.uhlirad1.homemyo.AppData;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.HashMap;
@@ -22,6 +26,12 @@ public class CatTracker implements ITracker {
     @Pref
     protected AppPreferences_ preferences;
 
+    @Bean
+    protected AppData data;
+
+    @RootContext
+    protected Context context;
+
     private Map<String, Room> mapping;
 
     private SharedPreferences trackerAppPreferences;
@@ -30,9 +40,9 @@ public class CatTracker implements ITracker {
     private String TRACKER_APP_PREFERENCE_NAME = "sharedRoom";
     private String TRACKER_APP_PREFERENCE_KEY = "room";
 
-    public CatTracker(Context context) {
-        IRoomParser parser = RoomParserFactory.createParser(context);
-        mapping = parser.parseMapping();
+    @AfterInject
+    public void init() {
+        mapping = data.getRoomMapping();
         try {
             Context trackerAppContext = context.createPackageContext(TRACKER_APP_PACKAGE, 0);
             trackerAppPreferences = trackerAppContext.getSharedPreferences(TRACKER_APP_PREFERENCE_NAME, Context.MODE_PRIVATE);

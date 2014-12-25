@@ -19,18 +19,26 @@ import cz.cvut.uhlirad1.homemyo.localization.RoomParserFactory;
 import cz.cvut.uhlirad1.homemyo.service.tree.Combo;
 import cz.cvut.uhlirad1.homemyo.service.tree.MyoPose;
 import cz.cvut.uhlirad1.homemyo.service.tree.Rooms;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created on 23.12.14
  *
  * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
+@EBean
 public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.PinnedSectionListAdapter {
 
     private static LayoutInflater inflater = null;
@@ -39,35 +47,25 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     private float density;
 
+    @RootContext
+    protected Context context;
+
+    @Bean
+    AppData data;
+
     private static int COMBO = 1;
     private static int ROOM = 2;
     private static int[] gestureViews = {R.id.gesture1, R.id.gesture2, R.id.gesture3};
 
 
-    public ComboAdapter(Context context, String treeConfig) {
+    @AfterInject
+    public void init() {
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         density = context.getResources().getDisplayMetrics().density;
 
-        Rooms tree = null;
-        List<Room> rooms;
-        List<Command> commands;
-
-        File config = new File(context.getExternalFilesDir(null), treeConfig);
-        Serializer serializer = new Persister();
-        try {
-            tree = serializer.read(Rooms.class, config);
-        } catch (Exception e) {
-            // TODO: Error Handling
-            Log.e("ComboAdapter", "Couldn't parse Tree config.");
-            e.printStackTrace();
-        }
-
-        rooms = RoomParserFactory.createParser(context).parse();
-        commands = CommandParserFactory.createCommandParser(context).parse();
-
-        combos = convertTree(tree, rooms, commands);
+        combos = convertTree(data.getRootRooms(), data.getRooms(), data.getCommands());
     }
 
     @Override
@@ -170,11 +168,11 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
         return !combos.get(position).isRoom;
     }
 
-    private List<Item> convertTree(Rooms tree, List<Room> rooms, List<Command> commands) {
+    private List<Item> convertTree(List<Room> tree, Map<Integer, Room> rooms, Map<Integer, Command> commands) {
         LinkedList<Item> list = new LinkedList<Item>();
         Command tmpCommand;
 
-        for (Room treeRoom : tree.getRoom()) {
+        for (Room treeRoom : tree) {
             if (treeRoom.getCombo() == null || treeRoom.getCombo().isEmpty()) continue;
 
             list.add(new Item(rooms.get(treeRoom.getId()).getName()));

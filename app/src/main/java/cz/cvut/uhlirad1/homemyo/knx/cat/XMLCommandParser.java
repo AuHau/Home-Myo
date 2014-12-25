@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.util.Log;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.knx.ICommandParser;
+import cz.cvut.uhlirad1.homemyo.localization.Room;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
@@ -18,40 +19,36 @@ import java.util.*;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 23.12.14
  */
-@EBean
 public class XMLCommandParser implements ICommandParser {
 
-    @Pref
-    AppPreferences_ preferences;
+    private Map<Integer, Command> checkData(List<Command> commands) throws XMLCommandParserException {
+        HashMap<Integer, Command> map = new HashMap<Integer, Command>();
 
-    List<Command> commands;
+        for (Command command : commands) {
+            if(command.getAddress().isEmpty() || command.getName().isEmpty() ||
+                    command.getElementType() == null || command.getDataType() == null)
+                throw new XMLCommandParserException("Commands config has not valid data! Invalid data at Command with ID - " + command.getId());
 
-    /**
-     * Initialization method which will parse data from XML config
-     * defined in AppPreferences.
-     */
-    @AfterInject
-    public void init() {
-        File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
-
-        if (!configDir.exists() && !configDir.mkdirs()) {
-            // TODO: Error Handling
-            Log.e("XMLCommandParser", "Config directory does not exist and can not be created!");
-            return;
+            map.put(command.getId(), command);
         }
 
-        File config = new File(configDir, preferences.commandConfig().get());
+        return map;
+    }
+
+
+    @Override
+    public Map<Integer, Command> parse(File config) {
         if (!config.exists()) {
             // TODO: Error Handling
-            Log.e("XMLCommandParser", "Commands config can not be found!");
-            return;
+            Log.e("XMLCommandParser", "Commands config doesn't exist!");
+            return null;
         }
 
         Serializer serializer = new Persister();
         try {
             Commands commandsContainer = serializer.read(Commands.class, config);
-            commands = commandsContainer.getCommands();
-            checkData();
+            List<Command> commandList = commandsContainer.getCommands();
+            return checkData(commandList);
         } catch (XMLCommandParserException e) {
             // TODO: Error Handling
             Log.e("XMLCommandParser", "Not valid Commands config data!");
@@ -61,25 +58,38 @@ public class XMLCommandParser implements ICommandParser {
             Log.e("XMLCommandParser", "Parsing of Commands was unsuccessful!");
             e.printStackTrace();
         }
+
+        return null;
     }
 
-    /**
-     * Method for checking consistency of parsed data.
-     * In case of some error XMLCommandParserException will be raised.
-     *
-     * @throws XMLCommandParserException
-     */
-    private void checkData() throws XMLCommandParserException {
-        for (Command command : commands) {
-            if(command.getAddress().isEmpty() || command.getName().isEmpty() ||
-                    command.getElementType() == null || command.getDataType() == null)
-                throw new XMLCommandParserException("Commands config has not valid data! Invalid data at Command with ID - " + command.getId());
+    @Override
+    public void save(File config, Map<Integer, Command> commands) {
+        if (!config.exists()) {
+            // TODO: Error Handling
+            Log.e("XMLCommandParser", "Commands config doesn't exist!");
+            return;
+        }
+
+        Serializer serializer = new Persister();
+        Commands commandsCommit = new Commands();
+        commandsCommit.setCommands(covertToList(commands));
+        try {
+            serializer.write(commandsCommit, config);
+        } catch (Exception e) {
+            // TODO: Error Handling
+            Log.e("XMLCommandParser", "Saving Commands was unsuccessful!");
+            e.printStackTrace();
         }
     }
 
 
-    @Override
-    public List<Command> parse() {
-        return commands;
+    private List<Command> covertToList(Map<Integer, Command> commands) {
+        LinkedList<Command> list = new LinkedList<Command>();
+
+        for (Map.Entry entryRoom: commands.entrySet()) {
+            list.add((Command) entryRoom.getValue());
+        }
+
+        return list;
     }
 }

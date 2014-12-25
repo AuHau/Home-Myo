@@ -19,65 +19,26 @@ import java.util.*;
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 23.12.14
  */
-@EBean
 public class XMLRoomParser implements IRoomParser {
 
-    @Pref
-    AppPreferences_ preferences;
-
-    List<Room> rooms;
+    Map<Integer, Room> rooms;
 
     Map<String, Room> mapping;
 
     /**
-     * Initialization method which will parse data from XML config
-     * defined in AppPreferences.
-     */
-    @AfterInject
-    public void init() {
-        File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
-
-        if(!configDir.exists() && !configDir.mkdirs()){
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Config directory does not exist and can not be created!");
-            return;
-        }
-
-        File config = new File (configDir, preferences.roomConfig().get());
-        if (!config.exists()) {
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Rooms config can not be found!");
-            return;
-        }
-
-        Serializer serializer = new Persister();
-        try {
-            Rooms roomsContainer = serializer.read(Rooms.class, config);
-            rooms = roomsContainer.getRoom();
-            createMapping();
-        }catch (XMLRoomParserException e){
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Not valid Rooms config data!");
-
-        } catch (Exception e) {
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Parsing of Rooms was unsuccessful!");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Method which will create Mapping from parsed List of Rooms.
+     * Method which will transform parsed List of Rooms into Map and
+     * create Mapping from parsed List of Rooms.
      * It will also check consistency of the parsed data, if some error
      * will be found, it will throw XMLRoomParserException
      *
      * @throws XMLRoomParserException
      */
-    private void createMapping() throws XMLRoomParserException {
+    private void createMapping(List<Room> list) throws XMLRoomParserException {
         mapping = new HashMap<String, Room>();
+        rooms = new HashMap<Integer, Room>();
         Set<Integer> idSet = new HashSet<Integer>();
 
-        for (Room room : rooms) {
+        for (Room room : list) {
             if(room.getName().isEmpty() || room.getMapping().isEmpty() || room.getId() == 0){
                 throw new XMLRoomParserException("Rooms config has not valid data! Room with ID - " + room.getId());
             }
@@ -88,18 +49,71 @@ public class XMLRoomParser implements IRoomParser {
 
             idSet.add(room.getId());
             mapping.put(room.getMapping(), room);
+            rooms.put(room.getId(), room);
         }
 
-        rooms.add(0, new Room(0, "Smart Home"));
+        rooms.put(0, new Room(0, "Smart Home"));
     }
 
     @Override
-    public List<Room> parse() {
-        return rooms;
+    public Map<Integer, Room> parse(File config) {
+        if (!config.exists()) {
+            // TODO: Error Handling
+            Log.e("XMLRoomParser", "Rooms config doesn't exist!");
+            return null;
+        }
+
+        Serializer serializer = new Persister();
+        try {
+            Rooms roomsContainer = serializer.read(Rooms.class, config);
+            List<Room> roomList = roomsContainer.getRoom();
+            createMapping(roomList);
+            return rooms;
+        }catch (XMLRoomParserException e){
+            // TODO: Error Handling
+            Log.e("XMLRoomParser", "Not valid Rooms config data!");
+
+        } catch (Exception e) {
+            // TODO: Error Handling
+            Log.e("XMLRoomParser", "Parsing of Rooms was unsuccessful!");
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
     public Map<String, Room> parseMapping() {
         return mapping;
+    }
+
+    @Override
+    public void save(File config, Map<Integer, Room> rooms) {
+        if (!config.exists()) {
+            // TODO: Error Handling
+            Log.e("XMLRoomParser", "Rooms config doesn't exist!");
+            return;
+        }
+
+        Serializer serializer = new Persister();
+        Rooms commitRooms = new Rooms();
+        commitRooms.setRoom(covertToList(rooms));
+        try {
+            serializer.write(commitRooms, config);
+        } catch (Exception e) {
+            // TODO: Error Handling
+            Log.e("XMLRoomParser", "Saving Rooms was unsuccessful!");
+            e.printStackTrace();
+        }
+    }
+
+    private List<Room> covertToList(Map<Integer, Room> rooms) {
+        LinkedList<Room> list = new LinkedList<Room>();
+
+        for (Map.Entry entryRoom: rooms.entrySet()) {
+            list.add((Room) entryRoom.getValue());
+        }
+
+        return list;
     }
 }

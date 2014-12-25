@@ -20,7 +20,7 @@ public class Combo {
     @Attribute(name = "command_id")
     private int commandId;
 
-    @ElementList(inline = true)
+    @ElementList(inline = true, required = false, name = "myo-pose")
     private List<MyoPose> myoPose;
 
 

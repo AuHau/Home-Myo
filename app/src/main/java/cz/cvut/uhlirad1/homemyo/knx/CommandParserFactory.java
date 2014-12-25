@@ -1,7 +1,6 @@
 package cz.cvut.uhlirad1.homemyo.knx;
 
-import android.content.Context;
-import cz.cvut.uhlirad1.homemyo.knx.cat.XMLCommandParser_;
+import cz.cvut.uhlirad1.homemyo.knx.cat.XMLCommandParser;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -11,7 +10,7 @@ public final class CommandParserFactory {
     private CommandParserFactory() {
     }
 
-    public static final ICommandParser createCommandParser(Context context){
-        return XMLCommandParser_.getInstance_(context);
+    public static final ICommandParser createCommandParser(){
+        return new XMLCommandParser();
     }
 }

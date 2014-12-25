@@ -25,6 +25,7 @@ import cz.cvut.uhlirad1.homemyo.service.ListeningService;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService_;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -34,6 +35,9 @@ public class MainActivity extends ListActivity {
 
     @Pref
     protected AppPreferences_ preferences;
+
+    @Bean
+    protected ComboAdapter adapter;
 
     Intent serviceIntent;
 
@@ -46,7 +50,7 @@ public class MainActivity extends ListActivity {
 
         // TODO: Zkontrolovat jestli existují Configy pro Rooms a Commands
 
-        setListAdapter(new ComboAdapter(this, preferences.treeConfig().get()));
+        setListAdapter(adapter);
     }
 
     @Override

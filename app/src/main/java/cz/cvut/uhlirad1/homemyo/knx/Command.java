@@ -39,15 +39,11 @@ public class Command {
     @Element(name = "type", required = false)
     private KnxElementTypes elementType;
 
-    @ElementList(required = false, inline = true)
-    private List<MyoPose> myoPose;
-
     public Command() {
     }
 
-    public Command(int id, List<MyoPose> myoPose) {
+    public Command(int id) {
         this.id = id;
-        this.myoPose = myoPose;
     }
 
     public Command(int id, String name, String description, String address, KnxDataTypeEnum dataType, KnxElementTypes elementTypes) {
@@ -59,15 +55,6 @@ public class Command {
         this.elementType = elementTypes;
     }
 
-    public Command(int id, String name, String description, String address, KnxDataTypeEnum dataType, KnxElementTypes elementType, List<MyoPose> myoPose) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.address = address;
-        this.dataType = dataType;
-        this.elementType = elementType;
-        this.myoPose = myoPose;
-    }
 
     public int getId() {
         return id;
@@ -87,10 +74,6 @@ public class Command {
 
     public String getAddress() {
         return address;
-    }
-
-    public List<MyoPose> getMyoPose() {
-        return myoPose;
     }
 
     public void setId(int id) {
@@ -115,10 +98,6 @@ public class Command {
 
     public void setElementType(KnxElementTypes elementType) {
         this.elementType = elementType;
-    }
-
-    public void setMyoPose(List<MyoPose> myoPose) {
-        this.myoPose = myoPose;
     }
 
     public boolean isDisplay() {

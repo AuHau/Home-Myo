@@ -1,5 +1,6 @@
 package cz.cvut.uhlirad1.homemyo.service.tree;
 
+import android.util.Log;
 import com.thalmic.myo.Pose;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
@@ -17,13 +18,13 @@ import java.util.Map;
  */
 public class TreeParser {
 
-    private List<Command> commands;
+    private Map<Integer, Command> commands;
 
-    public TreeParser(List<Command> commands) {
+    public TreeParser(Map<Integer, Command> commands) {
         this.commands = commands;
     }
 
-    public Map<Integer, Node> parse(File config){
+    public List<Room> parse(File config){
         Serializer serializer = new Persister();
 
         Rooms rooms = null;
@@ -32,53 +33,24 @@ public class TreeParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Map<Integer,Node> map = mapRooms(rooms);
-        return map;
+
+        return rooms.getRoom();
     }
 
-    private Map<Integer, Node> mapRooms(Rooms rooms){
-        HashMap<Integer, Node> map = new HashMap<Integer, Node>();
-
-        for(Room room : rooms.getRoom()){
-            processRoom(map, room);
-        }
-
-        return map;
-    }
-
-    private void processRoom(Map<Integer, Node> map,  Room room){
-        Node root = new Node();
-        map.put(room.getId(), root);
-
-        for(Combo combo : room.getCombo()){
-            processCombo(root, combo.getCommandId(), combo.getMyoPose());
-        }
-    }
-
-    private void processCombo(Node tree, int commandId, List<MyoPose> poses){
-
-        // All poses have been already applied, save command
-        if(poses.size() == 0){
-            tree.setCommand(findCommand(commandId));
+    public void save(File config, List<Room> rooms) {
+        if (!config.exists()) {
+            // TODO: Error Handling
+            Log.e("TreeParser", "Tree config doesn't exist!");
             return;
         }
 
-        // If there is already existing Node with pose, follow that path otherwise create new Node
-        Pose pose = poses.remove(0).getType();
-        if(tree.getChild(pose) != null){
-            processCombo(tree.getChild(pose), commandId, poses);
-        }else{
-            Node node = new Node(pose);
-            tree.addChild(pose, node);
-            processCombo(node, commandId, poses);
+        Serializer serializer = new Persister();
+        try {
+            serializer.write(rooms, config);
+        } catch (Exception e) {
+            // TODO: Error Handling
+            Log.e("TreeParser", "Saving Tree was unsuccessful!");
+            e.printStackTrace();
         }
-    }
-
-    private Command findCommand(int commandId){
-        for(Command command : commands){
-            if(command.getId() == commandId) return command;
-        }
-
-        return null;
     }
 }
