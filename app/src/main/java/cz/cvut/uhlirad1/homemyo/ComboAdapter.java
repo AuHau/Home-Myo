@@ -71,6 +71,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
     @Override
     public void notifyDataSetChanged() {
         combos = convertTree(data.getRootRooms(), data.getRooms(), data.getCommands());
+        super.notifyDataSetChanged();
     }
 
     @Override
