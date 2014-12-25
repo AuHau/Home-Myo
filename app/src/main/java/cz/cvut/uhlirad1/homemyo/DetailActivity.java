@@ -36,6 +36,9 @@ public class DetailActivity extends Activity {
     @ViewById
     protected TextView commandType;
 
+    @ViewById
+    protected TextView roomName;
+
 //    @ViewById
 //    protected ImageView commandTypeIcon;
 
@@ -54,7 +57,12 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        init();
+    }
+
+    private void init() {
         combo = data.getCombo(comboId);
+
         if(combo.getName() != null && !combo.getName().isEmpty()) {
             setTitle(combo.getName());
         }
@@ -63,6 +71,8 @@ public class DetailActivity extends Activity {
         commandName.setText(command.getName());
         commandAddress.setText(command.getAddress());
         commandType.setText(command.getElementType().toNiceString());
+
+        roomName.setText(data.getRooms().get(roomId).getName());
 
         // TODO: Zprovoznit zobrazení ikonky u typu elementu
 //        commandTypeIcon.setImageResource(spinnerCommand.getElementType().getIconResource());
@@ -82,12 +92,23 @@ public class DetailActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        init();
+    }
+
     @OptionsItem
     public void actionDelete() {
         data.removeCombo(comboId);
         data.commitTree();
 
         MainActivity_.intent(this).start();
+    }
+
+    @OptionsItem
+    public void actionEdit() {
+        AddActivity_.intent(this).comboId(comboId).roomId(roomId).start();
     }
 
     @Override

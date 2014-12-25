@@ -69,13 +69,8 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
     }
 
     @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-
+    public void notifyDataSetChanged() {
+        combos = convertTree(data.getRootRooms(), data.getRooms(), data.getCommands());
     }
 
     @Override

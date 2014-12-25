@@ -46,7 +46,13 @@ public class MainActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
 
         ComboAdapter.Item item = (ComboAdapter.Item) getListAdapter().getItem(position);
-        DetailActivity_.intent(this).comboId(item.getComboId()).start();
+        DetailActivity_.intent(this).comboId(item.getComboId()).roomId(item.getRoomId()).start();
+    }
+
+    @Override
+    protected void onResume() {
+        ((ComboAdapter) getListAdapter()).notifyDataSetChanged();
+        super.onResume();
     }
 
     @Override

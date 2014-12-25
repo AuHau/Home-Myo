@@ -10,10 +10,7 @@ import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
 import cz.cvut.uhlirad1.homemyo.service.tree.Combo;
 import cz.cvut.uhlirad1.homemyo.service.tree.MyoPose;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.*;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -45,6 +42,15 @@ public class AddActivity extends Activity {
     @ViewById
     protected Spinner spinnerGesture3;
 
+    @ViewById
+    protected Button btnSave;
+
+    @Extra
+    protected int comboId;
+
+    @Extra
+    protected int roomId;
+
     private ArrayList<Command> commandList;
     private ArrayList<Room> roomList;
 
@@ -53,9 +59,9 @@ public class AddActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, convertCommandsToSpinner());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCommand.setAdapter(adapter);
+        ArrayAdapter commandAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, convertCommandsToSpinner());
+        commandAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCommand.setAdapter(commandAdapter);
 
         ArrayAdapter roomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, convertRoomsToSpinner());
         roomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -69,6 +75,28 @@ public class AddActivity extends Activity {
         spinnerGesture1.setAdapter(gestureAdapter);
         spinnerGesture2.setAdapter(gestureAdapter);
         spinnerGesture3.setAdapter(gestureAdapter);
+
+        if (comboId > 0) {
+            Combo combo = data.getCombo(comboId);
+            setTitle((combo.getName() == null ? "Edit" : combo.getName() + " - Edit"));
+
+            name.setText(combo.getName());
+            spinnerCommand.setSelection(commandAdapter.getPosition(data.getCommands().get(combo.getCommandId()).getName()));
+            spinnerRoom.setSelection(roomAdapter.getPosition(data.getRooms().get(roomId).getName()));
+
+            Spinner[] spinners = {spinnerGesture1, spinnerGesture2, spinnerGesture3};
+            int i = 0;
+            for (MyoPose pose : combo.getMyoPose()) {
+                spinners[i++].setSelection(gestureAdapter.getPosition(findPose(pose, list)));
+            }
+        }
+    }
+
+    private MyoPose findPose(MyoPose searchedPose, List<MyoPose> poses) {
+        for (MyoPose pose : poses) {
+            if(pose.getType() == searchedPose.getType()) return pose;
+        }
+        return null;
     }
 
     @Click
@@ -79,26 +107,41 @@ public class AddActivity extends Activity {
         if (((MyoPose)spinnerGesture1.getSelectedItem()).getType() != null) {
             poses.add((MyoPose) spinnerGesture1.getSelectedItem());
         }
+
         if (((MyoPose)spinnerGesture2.getSelectedItem()).getType() != null) {
             poses.add((MyoPose) spinnerGesture2.getSelectedItem());
         }
+
         if (((MyoPose)spinnerGesture3.getSelectedItem()).getType() != null) {
             poses.add((MyoPose) spinnerGesture3.getSelectedItem());
         }
 
+        Combo combo;
+        if (comboId > 0) {
+            combo = data.getCombo(comboId);
+            combo.setCommandId(commandList.get(spinnerCommand.getSelectedItemPosition()).getId());
+            combo.setMyoPose(poses);
+            combo.setName(name.getText().toString());
 
-        Combo combo = new Combo(
-                data.getHighestComboIdAndRaise(),
-                commandList.get(spinnerCommand.getSelectedItemPosition()).getId(),
-                name.getText().toString(),
-                poses
-                );
+            int formRoomId = roomList.get(spinnerRoom.getSelectedItemPosition()).getId();
+            if (roomId != formRoomId) {
+                data.moveCombo(combo, roomId, formRoomId);
+            }
+        } else {
+            combo = new Combo(
+                    data.getHighestComboIdAndRaise(),
+                    commandList.get(spinnerCommand.getSelectedItemPosition()).getId(),
+                    name.getText().toString(),
+                    poses
+            );
+            data.addCombo(combo, roomList.get(spinnerRoom.getSelectedItemPosition()).getId());
+        }
 
 
-        data.addCombo(combo, roomList.get(spinnerRoom.getSelectedItemPosition()).getId());
         data.commitTree();
 
-        MainActivity_.intent(this).start();
+        finish();
+//        DetailActivity_.intent(this).roomId(roomId).comboId(comboId).start();
     }
 
     private List<String> convertCommandsToSpinner(){

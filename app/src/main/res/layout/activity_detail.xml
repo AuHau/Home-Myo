@@ -1,97 +1,104 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="cz.cvut.uhlirad1.homemyo.DetailActivity">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Command"
-            android:id="@+id/label_command"
-            android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"/>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="cz.cvut.uhlirad1.homemyo.DetailActivity">
 
-    <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_below="@+id/label_command"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:id="@+id/separator1"/>
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Command"
+                android:id="@+id/label_command"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
 
-    <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/separator1"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="12dp"
-            android:id="@+id/tableLayout">
-
-        <TableRow
+        <View
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/label_command"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:id="@+id/separator1"/>
 
-            <TextView
-                    style="@style/AppTheme.Detail.Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Name:"
-                    android:layout_column="0"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/commandName"
-                    android:layout_column="1"
-                    android:layout_span="1"
-                    android:padding="3dp"/>
-
-        </TableRow>
-
-        <TableRow
+        <TableLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator1"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="12dp"
+                android:id="@+id/tableLayout">
 
-            <TextView
-                    style="@style/AppTheme.Detail.Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Address:"
-                    android:layout_column="0"/>
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/commandAddress"
-                    android:layout_column="1"
-                    android:layout_span="1"
-                    android:padding="3dp"/>
-        </TableRow>
+                <TextView
+                        style="@style/AppTheme.Detail.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Name:"
+                        android:layout_column="0"/>
 
-        <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/commandName"
+                        android:layout_column="1"
+                        android:layout_span="1"
+                        android:padding="3dp"/>
 
-            <TextView
-                    style="@style/AppTheme.Detail.Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Element type:"
-                    android:layout_column="0"
-                    />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <TextView
+                        style="@style/AppTheme.Detail.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Address:"
+                        android:layout_column="0"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/commandAddress"
+                        android:layout_column="1"
+                        android:layout_span="1"
+                        android:padding="3dp"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <TextView
+                        style="@style/AppTheme.Detail.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Element type:"
+                        android:layout_column="0"
+                        />
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -102,139 +109,189 @@
                         android:padding="3dp"/>
 
                 <!--<ImageView-->
-                        <!--android:layout_width="20dp"-->
-                        <!--android:layout_height="20dp"-->
-                        <!--android:id="@+id/commandTypeIcon"-->
-                        <!--android:layout_column="2"-->
-                        <!--android:src="@drawable/ic_center"/>-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:id="@+id/commandTypeIcon"-->
+                <!--android:layout_column="2"-->
+                <!--android:src="@drawable/ic_center"/>-->
 
 
 
-        </TableRow>
-    </TableLayout>
+            </TableRow>
+        </TableLayout>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Gestures"
-            android:id="@+id/label_gestures"
-            android:layout_below="@+id/tableLayout"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="30dp"
-            android:textStyle="bold"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Gestures"
+                android:id="@+id/label_gestures"
+                android:textStyle="bold"
+                android:layout_below="@+id/linearLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="18dp"/>
 
 
-    <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_below="@+id/label_gestures"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
-            android:id="@+id/separator2"/>
-
-    <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/separator2"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="12dp"
-            android:orientation="vertical"
-            android:id="@+id/gesturesContainer">
-
-        <TableRow
-                android:paddingBottom="10dp"
+        <View
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/label_gestures"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:id="@+id/separator2"/>
+
+        <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/separator2"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:id="@+id/gesturesContainer">
+
+            <TableRow
+                    android:paddingBottom="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestNumber1"
+                        android:layout_column="0"
+                        android:gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="3dp"/>
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gestIcon1"
+                        android:layout_column="1"
+                        android:padding="3dp"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestName1"
+                        android:layout_column="2"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"/>
+            </TableRow>
+            <TableRow
+                    android:paddingBottom="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestNumber2"
+                        android:layout_column="0"
+                        android:gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="3dp"/>
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gestIcon2"
+                        android:layout_column="1"
+                        android:padding="3dp"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestName2"
+                        android:layout_column="2"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"/>
+            </TableRow>
+            <TableRow
+                    android:paddingBottom="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestNumber3"
+                        android:layout_column="0"
+                        android:gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="3dp"/>
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gestIcon3"
+                        android:layout_column="1"
+                        android:padding="3dp"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/gestName3"
+                        android:layout_column="2"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"/>
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Room"
+                android:id="@+id/label_room"
+                android:textStyle="bold"
+                android:layout_below="@+id/tableLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="18dp"/>
+
+
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/label_room"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:id="@+id/separator3"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout"
+                android:layout_below="@+id/separator3"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="12dp">
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestNumber1"
-                    android:layout_column="0"
-                    android:gravity="center_vertical"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="3dp"/>
-
-            <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/gestIcon1"
-                    android:layout_column="1"
-                    android:padding="3dp"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Name:"
+                    android:id="@+id/textView2"
+                    android:textStyle="bold"
+                    android:paddingEnd="10dp"/>
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestName1"
-                    android:layout_column="2"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"/>
-        </TableRow>
-        <TableRow
-                android:paddingBottom="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestNumber2"
-                    android:layout_column="0"
-                    android:gravity="center_vertical"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="3dp"/>
-
-            <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/gestIcon2"
-                    android:layout_column="1"
-                    android:padding="3dp"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestName2"
-                    android:layout_column="2"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"/>
-        </TableRow>
-        <TableRow
-                android:paddingBottom="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                    android:id="@+id/roomName"/>
+        </LinearLayout>
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestNumber3"
-                    android:layout_column="0"
-                    android:gravity="center_vertical"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="3dp"/>
 
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gestIcon3"
-                    android:layout_column="1"
-                    android:padding="3dp"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/gestName3"
-                    android:layout_column="2"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"/>
-        </TableRow>
-    </TableLayout>
 </RelativeLayout>
+</ScrollView>
+

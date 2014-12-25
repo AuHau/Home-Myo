@@ -43,7 +43,7 @@ public class AppData {
     private ICommandParser commandParser;
     private TreeParser treeParser;
 
-    private int highestComboId = Integer.MIN_VALUE;
+    private int highestComboId = 0;
 
     @Pref
     protected AppPreferences_ preferences;
@@ -153,6 +153,7 @@ public class AppData {
         return getCombo(id, -1);
     }
 
+    // TODO: Tahle metoda nemá uplně smysl
     public Combo getCombo(int id, int roomId) {
         if (roomId >= 0) {
             Room room = findRoom(id, rootRooms);
@@ -201,6 +202,23 @@ public class AppData {
     public void addCombo(Combo combo, int roomId) {
         for (Room room : rootRooms) {
             if (room.getId() == roomId) room.getCombo().add(combo);
+        }
+    }
+
+    public void moveCombo(Combo movedCombo, int fromRoomId, int toRoomId) {
+        int pos;
+        for (Room room : rootRooms) {
+            pos = 0;
+            for (Combo combo : room.getCombo()) {
+                if (combo.getId() == movedCombo.getId()) {
+                    room.getCombo().remove(pos);
+                    break;
+                }
+            }
+
+            if (room.getId() == toRoomId) {
+                room.getCombo().add(movedCombo);
+            }
         }
     }
 
