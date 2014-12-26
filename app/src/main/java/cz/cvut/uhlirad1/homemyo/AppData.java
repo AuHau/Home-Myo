@@ -21,6 +21,7 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -200,13 +201,31 @@ public class AppData {
     }
 
     public void addCombo(Combo combo, int roomId) {
+        boolean added = false;
         for (Room room : rootRooms) {
-            if (room.getId() == roomId) room.getCombo().add(combo);
+            if (room.getId() == roomId) {
+                room.getCombo().add(combo);
+                added = true;
+            }
+        }
+
+        // Room is not currently in tree
+        if (!added) {
+            Room room = new Room(roomId);
+            ArrayList<Combo> list = new ArrayList<Combo>();
+            list.add(combo);
+            room.setCombo(list);
+
+            // Whole flat room should be first
+            if (roomId == 0) {
+                rootRooms.add(0, room);
+            }else
+                rootRooms.add(room);
         }
     }
 
-    public void moveCombo(Combo movedCombo, int fromRoomId, int toRoomId) {
-        int pos;
+    public void moveCombo(Combo movedCombo, int toRoomId) {
+        int pos; boolean moved = false;
         for (Room room : rootRooms) {
             pos = 0;
             for (Combo combo : room.getCombo()) {
@@ -217,8 +236,23 @@ public class AppData {
             }
 
             if (room.getId() == toRoomId) {
+                moved = true;
                 room.getCombo().add(movedCombo);
             }
+        }
+
+        // Room is not currently in tree
+        if (!moved) {
+            Room room = new Room(toRoomId);
+            ArrayList<Combo> list = new ArrayList<Combo>();
+            list.add(movedCombo);
+            room.setCombo(list);
+
+            // Whole flat room should be first
+            if (toRoomId == 0) {
+                rootRooms.add(0, room);
+            }else
+                rootRooms.add(room);
         }
     }
 
@@ -245,7 +279,8 @@ public class AppData {
 
     private void transferListToTree(){
         for(Room room : rootRooms){
-            processRoom(rootTree, room);
+            if(room.getCombo() != null)
+                processRoom(rootTree, room);
         }
     }
 

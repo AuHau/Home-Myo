@@ -1,4 +1,4 @@
-package cz.cvut.uhlirad1.homemyo;
+package cz.cvut.uhlirad1.homemyo.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cz.cvut.uhlirad1.homemyo.R;
 import cz.cvut.uhlirad1.homemyo.service.tree.MyoPose;
 import org.w3c.dom.Text;
 

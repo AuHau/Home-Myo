@@ -31,6 +31,10 @@ public final class Room{
     public Room() {
     }
 
+    public Room(int id) {
+        this.id = id;
+    }
+
     public Room(int id, String name) {
         this.id = id;
         this.name = name;

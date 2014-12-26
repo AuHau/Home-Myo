@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import cz.cvut.uhlirad1.homemyo.adapters.CommandsAdapter;
+import cz.cvut.uhlirad1.homemyo.adapters.GestureAdapter;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
 import cz.cvut.uhlirad1.homemyo.service.tree.Combo;
@@ -13,9 +15,7 @@ import cz.cvut.uhlirad1.homemyo.service.tree.MyoPose;
 import org.androidannotations.annotations.*;
 import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @EActivity
@@ -59,9 +59,12 @@ public class AddActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        ArrayAdapter commandAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, convertCommandsToSpinner());
-        commandAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCommand.setAdapter(commandAdapter);
+        List<Command> commands = new ArrayList<Command>(data.getCommands().values());
+        Collections.sort(commands, new CommandComparator());
+
+        CommandsAdapter commandsAdapter = new CommandsAdapter(this, R.layout.command, commands);
+        commandsAdapter.setDropDownViewResource(R.layout.command);
+        spinnerCommand.setAdapter(commandsAdapter);
 
         ArrayAdapter roomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, convertRoomsToSpinner());
         roomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -81,7 +84,7 @@ public class AddActivity extends Activity {
             setTitle((combo.getName() == null ? "Edit" : combo.getName() + " - Edit"));
 
             name.setText(combo.getName());
-            spinnerCommand.setSelection(commandAdapter.getPosition(data.getCommands().get(combo.getCommandId()).getName()));
+            spinnerCommand.setSelection(commandsAdapter.getPosition(data.getCommands().get(combo.getCommandId())));
             spinnerRoom.setSelection(roomAdapter.getPosition(data.getRooms().get(roomId).getName()));
 
             Spinner[] spinners = {spinnerGesture1, spinnerGesture2, spinnerGesture3};
@@ -101,6 +104,11 @@ public class AddActivity extends Activity {
 
     @Click
     public void btnSave() {
+
+        // TODO: Kontrolovat Room Combos, zdali se nepřekrývají s All Combos (ty by se v některých místnosti tedy nemohli zpustit). Což by nemuselo být na škodu, ale uživatel by o tom měl vědět.
+        // TODO: Zkontrolovat vyplnění formuláře (aspon jedno Gesture atp).
+        // Todo: Zkontrolovat zdali již neexistuje Combo se stejnými Poses.
+
 
         List<MyoPose> poses = new ArrayList<MyoPose>();
 
@@ -125,7 +133,7 @@ public class AddActivity extends Activity {
 
             int formRoomId = roomList.get(spinnerRoom.getSelectedItemPosition()).getId();
             if (roomId != formRoomId) {
-                data.moveCombo(combo, roomId, formRoomId);
+                data.moveCombo(combo, formRoomId);
             }
         } else {
             combo = new Combo(
@@ -166,5 +174,13 @@ public class AddActivity extends Activity {
         }
 
         return list;
+    }
+
+    private class CommandComparator implements Comparator<Command>{
+
+        @Override
+        public int compare(Command lhs, Command rhs) {
+            return lhs.getAddress().compareTo(rhs.getAddress());
+        }
     }
 }

@@ -1,4 +1,4 @@
-package cz.cvut.uhlirad1.homemyo;
+package cz.cvut.uhlirad1.homemyo.adapters;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.hb.views.PinnedSectionListView;
+import cz.cvut.uhlirad1.homemyo.AppData;
+import cz.cvut.uhlirad1.homemyo.R;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.knx.CommandParserFactory;
 import cz.cvut.uhlirad1.homemyo.knx.KnxElementTypes;

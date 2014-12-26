@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import cz.cvut.uhlirad1.homemyo.adapters.ComboAdapter;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService_;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
@@ -34,7 +35,6 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Kontrolovat Room Combos, zdali se nepřekrývají s All Combos (ty by se v některých místnosti tedy nemohli zpustit). Což by nemuselo být na škodu, ale uživatel by o tom měl vědět.
 
         // TODO: Zkontrolovat jestli existují Configy pro Rooms a Commands
 

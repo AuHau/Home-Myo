@@ -29,6 +29,8 @@ public enum KnxElementTypes {
                 return R.drawable.ic_socket;
             case TEMPERATURE:
                 return R.drawable.ic_temp;
+            case BLINDS:
+                return R.drawable.ic_blinds;
             default:
                 return 0;
         }

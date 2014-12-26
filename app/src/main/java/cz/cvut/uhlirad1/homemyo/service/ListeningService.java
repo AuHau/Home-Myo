@@ -85,6 +85,7 @@ public class ListeningService extends Service {
                 .setPriority(Notification.PRIORITY_LOW)
                 .build();
 
+        // TODO: Vyřešit problém s nepřesměrováním na Aplikaci
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0, n);
