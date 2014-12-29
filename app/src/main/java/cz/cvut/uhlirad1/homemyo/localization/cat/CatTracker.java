@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import cz.cvut.uhlirad1.homemyo.AppData;
+import cz.cvut.uhlirad1.homemyo.knx.cat.Location_;
 import cz.cvut.uhlirad1.homemyo.localization.*;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import org.androidannotations.annotations.AfterInject;
@@ -32,25 +33,18 @@ public class CatTracker implements ITracker {
     @RootContext
     protected Context context;
 
+    @Pref
+    protected Location_ location;
+
     private Map<String, Room> mapping;
-
-    private SharedPreferences trackerAppPreferences;
-
-    private String TRACKER_APP_PACKAGE = "com.example.rtlslocalizationservice";
-    private String TRACKER_APP_PREFERENCE_NAME = "sharedRoom";
-    private String TRACKER_APP_PREFERENCE_KEY = "room";
 
     @AfterInject
     public void init() {
-        mapping = data.getRoomMapping();
-        try {
-            Context trackerAppContext = context.createPackageContext(TRACKER_APP_PACKAGE, 0);
-            trackerAppPreferences = trackerAppContext.getSharedPreferences(TRACKER_APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        } catch (PackageManager.NameNotFoundException e) {
-            preferences.locEnabled().put(false);
-            e.printStackTrace();
-        }
+        // Reset location module
+        location.location().put(-1);
+
+        mapping = data.getRoomMapping();
     }
 
     @Override
@@ -60,25 +54,8 @@ public class CatTracker implements ITracker {
 
     @Override
     public Room getLocation(boolean isWaiting) throws TrackerException {
-        String roomString = trackerAppPreferences.getString(TRACKER_APP_PREFERENCE_KEY, null);
 
-        if(roomString == null){
-            if(isWaiting) {
-                int iteration = 0;
-
-                // TODO: Přijít na lepší řešení než bruteforce sleep
-                while (iteration < TrackerFactory.WAITING_ITERATION && roomString == null) {
-                    SystemClock.sleep(TrackerFactory.WAITING_TIME);
-                    roomString = trackerAppPreferences.getString(TRACKER_APP_PREFERENCE_KEY, null);
-                }
-
-                if (roomString == null) throw new TrackerException();
-            } else {
-                throw new TrackerException();
-            }
-        }
-
-        Room room = mapping.get(roomString);
+        Room room = mapping.get(location.location().get());
         if(room == null) throw new TrackerException();
 
         return room;

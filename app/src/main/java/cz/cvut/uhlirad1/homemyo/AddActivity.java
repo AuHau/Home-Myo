@@ -42,9 +42,6 @@ public class AddActivity extends Activity {
     @ViewById
     protected Spinner spinnerGesture3;
 
-    @ViewById
-    protected Button btnSave;
-
     @Extra
     protected int comboId;
 

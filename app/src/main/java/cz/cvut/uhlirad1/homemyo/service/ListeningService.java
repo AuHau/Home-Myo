@@ -13,8 +13,11 @@ import android.widget.Toast;
 import com.thalmic.myo.*;
 import cz.cvut.uhlirad1.homemyo.MainActivity;
 import cz.cvut.uhlirad1.homemyo.R;
+import cz.cvut.uhlirad1.homemyo.knx.cat.Location_;
+import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
@@ -24,10 +27,19 @@ import org.androidannotations.annotations.EService;
 public class ListeningService extends Service {
 
     private static final String TAG = "ListeningService";
-    private Toast mToast;
+    public static int LOCATION_UPDATE = 1;
+    private Toast toast;
+    final Messenger messenger = new Messenger(new LocationMessenger());
+
 
     @Bean
     protected MyoListener listener;
+
+    @Pref
+    protected AppPreferences_ preferences;
+
+    @Pref
+    protected Location_ location;
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -58,7 +70,7 @@ public class ListeningService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return messenger.getBinder();
     }
 
     @Override
@@ -100,12 +112,24 @@ public class ListeningService extends Service {
 
     private void showToast(String text) {
         Log.w(TAG, text);
-        if (mToast == null) {
-            mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+        if (toast == null) {
+            toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
         } else {
-            mToast.setText(text);
+            toast.setText(text);
         }
-        mToast.show();
+        toast.show();
+    }
+
+    public final class LocationMessenger extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.i("ListenerService", "Location recieved - " + msg.arg1);
+            if (msg.what == LOCATION_UPDATE) {
+                location.location().put(msg.arg1);
+            }
+            super.handleMessage(msg);
+        }
     }
 
     private final class ServiceHandler extends Handler {

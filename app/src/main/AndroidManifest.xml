@@ -45,7 +45,14 @@
             android:name="com.thalmic.myo.scanner.ScanActivity"
             android:parentActivityName="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity" />
 
-        <service android:name="cz.cvut.uhlirad1.homemyo.service.ListeningService_" />
+        <service android:name="cz.cvut.uhlirad1.homemyo.service.ListeningService_"
+                 android:enabled="true"
+                 android:exported="true">
+            <intent-filter>
+                <!-- Service name -->
+                <action android:name="cz.cvut.uhlirad1.homemyo.FUCK" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="cz.cvut.uhlirad1.homemyo.DetailActivity_"
