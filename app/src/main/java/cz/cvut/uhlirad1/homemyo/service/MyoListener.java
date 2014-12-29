@@ -8,6 +8,7 @@ import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import cz.cvut.uhlirad1.homemyo.AppData;
 import cz.cvut.uhlirad1.homemyo.knx.*;
+import cz.cvut.uhlirad1.homemyo.knx.cat.CatAdapter;
 import cz.cvut.uhlirad1.homemyo.localization.ITracker;
 import cz.cvut.uhlirad1.homemyo.localization.Room;
 import cz.cvut.uhlirad1.homemyo.localization.TrackerException;
@@ -156,8 +157,7 @@ public class MyoListener extends AbstractDeviceListener {
     private void sendCommand(Command command) {
         ITelegram telegram = TelegramFactory.createTelegram();
         telegram.setCommand(command);
-        // TODO: Přetypování podle typu v Commandu a né brutefore na Boolean
-        telegram.setBoolean((Boolean) adapter.getState(telegram));
+//        telegram.setBoolean((Boolean) adapter.getState(telegram));
         adapter.sendTelegram(telegram);
     }
 

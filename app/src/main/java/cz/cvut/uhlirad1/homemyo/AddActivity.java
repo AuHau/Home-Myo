@@ -56,10 +56,10 @@ public class AddActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        List<Command> commands = new ArrayList<Command>(data.getCommands().values());
-        Collections.sort(commands, new CommandComparator());
+        commandList = new ArrayList<Command>(data.getCommands().values());
+        Collections.sort(commandList, new CommandComparator());
 
-        CommandsAdapter commandsAdapter = new CommandsAdapter(this, R.layout.command, commands);
+        CommandsAdapter commandsAdapter = new CommandsAdapter(this, R.layout.command, commandList);
         commandsAdapter.setDropDownViewResource(R.layout.command);
         spinnerCommand.setAdapter(commandsAdapter);
 
