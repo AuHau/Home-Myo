@@ -13,7 +13,7 @@ public interface IRoomParser {
      * Method will parse Rooms specification and return List of Rooms
      * @return
      */
-    public Map<Integer, Room> parse(File config);
+    public Map<Integer, Room> parse(File config) throws Exception;
 
     /**
      * Since Localization can be implemented several ways, mapping of
@@ -26,5 +26,5 @@ public interface IRoomParser {
      */
     public Map<String, Room> parseMapping();
 
-    public void save(File config, Map<Integer,Room> rooms);
+    public void save(File config, Map<Integer,Room> rooms) throws Exception;
 }

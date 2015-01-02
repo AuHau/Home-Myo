@@ -29,15 +29,21 @@ public class MainActivity extends ListActivity {
     @Bean
     protected ComboAdapter adapter;
 
+    @Bean
+    protected AppData data;
+
     Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!data.areDataValid()) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
-
-
-        // TODO: Zkontrolovat jestli existují Configy pro Rooms a Commands
 
         setListAdapter(adapter);
     }

@@ -59,8 +59,6 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
     private static int ROOM = 2;
     private static int[] gestureViews = {R.id.gesture1, R.id.gesture2, R.id.gesture3};
 
-
-    @AfterInject
     public void init() {
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -78,11 +76,13 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     @Override
     public int getCount() {
+        if(combos == null) init();
         return combos.size();
     }
 
     @Override
     public Object getItem(int position) {
+        if(combos == null) init();
         return combos.get(position);
     }
 
@@ -98,6 +98,8 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if(combos == null) init();
+
         boolean isNew = convertView == null;
         if (convertView == null)
             convertView = inflater.inflate(R.layout.row, null);
@@ -138,6 +140,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     @Override
     public int getItemViewType(int position) {
+        if(combos == null) init();
         return (combos.get(position).isRoom ? this.ROOM : this.COMBO);
     }
 
@@ -148,6 +151,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     @Override
     public boolean isEmpty() {
+        if(combos == null) init();
         return combos.isEmpty();
     }
 
@@ -163,6 +167,7 @@ public class ComboAdapter extends BaseAdapter implements PinnedSectionListView.P
 
     @Override
     public boolean isEnabled(int position) {
+        if(combos == null) init();
         return !combos.get(position).isRoom;
     }
 

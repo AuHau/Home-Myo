@@ -56,30 +56,17 @@ public class XMLRoomParser implements IRoomParser {
     }
 
     @Override
-    public Map<Integer, Room> parse(File config) {
+    public Map<Integer, Room> parse(File config) throws Exception {
         if (!config.exists()) {
-            // TODO: Error Handling
             Log.e("XMLRoomParser", "Rooms config doesn't exist!");
-            return null;
+            throw new XMLRoomParserException("Rooms configuration file can not be found!");
         }
 
         Serializer serializer = new Persister();
-        try {
-            Rooms roomsContainer = serializer.read(Rooms.class, config);
-            List<Room> roomList = roomsContainer.getRoom();
-            createMapping(roomList);
-            return rooms;
-        }catch (XMLRoomParserException e){
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Not valid Rooms config data!");
-
-        } catch (Exception e) {
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Parsing of Rooms was unsuccessful!");
-            e.printStackTrace();
-        }
-
-        return null;
+        Rooms roomsContainer = serializer.read(Rooms.class, config);
+        List<Room> roomList = roomsContainer.getRoom();
+        createMapping(roomList);
+        return rooms;
     }
 
     @Override
@@ -88,23 +75,16 @@ public class XMLRoomParser implements IRoomParser {
     }
 
     @Override
-    public void save(File config, Map<Integer, Room> rooms) {
+    public void save(File config, Map<Integer, Room> rooms) throws Exception {
         if (!config.exists()) {
-            // TODO: Error Handling
             Log.e("XMLRoomParser", "Rooms config doesn't exist!");
-            return;
+            throw new XMLRoomParserException("Rooms configuration file can not be found!");
         }
 
         Serializer serializer = new Persister();
         Rooms commitRooms = new Rooms();
         commitRooms.setRoom(covertToList(rooms));
-        try {
-            serializer.write(commitRooms, config);
-        } catch (Exception e) {
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Saving Rooms was unsuccessful!");
-            e.printStackTrace();
-        }
+        serializer.write(commitRooms, config);
     }
 
     private List<Room> covertToList(Map<Integer, Room> rooms) {

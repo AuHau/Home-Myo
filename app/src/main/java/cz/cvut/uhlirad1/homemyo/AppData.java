@@ -3,6 +3,7 @@ package cz.cvut.uhlirad1.homemyo;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 import com.thalmic.myo.Pose;
 import cz.cvut.uhlirad1.homemyo.knx.Command;
 import cz.cvut.uhlirad1.homemyo.knx.CommandParserFactory;
@@ -21,6 +22,7 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,92 +59,113 @@ public class AppData {
         roomParser = RoomParserFactory.createParser();
         commandParser = CommandParserFactory.createCommandParser();
 
-        parseRooms();
-        parseCommands();
+        try {
+            parseRooms();
+            parseCommands();
 
-        File treeConfig = getTreeConfig();
-        if (treeConfig != null) {
-            treeParser = new TreeParser();
-            rootRooms = treeParser.parse(treeConfig);
-            rootTree = new HashMap<Integer, Node>();
-            transferListToTree();
+            File treeConfig = getTreeConfig();
+            if (treeConfig != null) {
+                treeParser = new TreeParser();
+                rootRooms = treeParser.parse(treeConfig);
+                rootTree = new HashMap<Integer, Node>();
+                transferListToTree();
+            }
+        } catch (IllegalStateException e) {
+            Log.e("AppData", "Error! " + e.getMessage());
+            showToast(e.getMessage());
+        } catch (Exception e) {
+            Log.e("AppData", "Error! " + e.getMessage());
+            showToast(e.getMessage());
         }
     }
 
-    private File getRoomsConfig(){
+    public boolean areDataValid() {
+        return rootRooms != null && commands != null && rooms != null;
+    }
+
+    private File getRoomsConfig() {
         File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
 
-        if(!configDir.exists() && !configDir.mkdirs()){
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Config directory does not exist and can not be created!");
-            return null;
+        if (!configDir.exists() && !configDir.mkdirs()) {
+            Log.e("AppData", "Config directory does not exist and can not be created!");
+            throw new IllegalStateException("Config directory does not exist.");
         }
 
-        File config = new File (configDir, preferences.roomConfig().get());
+        File config = new File(configDir, preferences.roomConfig().get());
         if (!config.exists()) {
-            // TODO: Error Handling
-            Log.e("XMLRoomParser", "Rooms config can not be found!");
-            return null;
+            Log.e("AppData", "Rooms config can not be found!");
+            throw new IllegalStateException("Rooms configuration file can not be found.");
         }
 
         return config;
     }
 
-    private void parseRooms(){
+    private void parseRooms() throws Exception {
         File config = getRoomsConfig();
-        if (config != null){
+        if (config != null) {
             rooms = roomParser.parse(config);
             roomMapping = roomParser.parseMapping();
         }
     }
 
-    public void commitRooms(){
-        File config = getRoomsConfig();
-        if (config != null) roomParser.save(config, rooms);
+    public void commitRooms() {
+        try {
+            File config = getRoomsConfig();
+            roomParser.save(config, rooms);
+        } catch (Exception e) {
+            showToast("Error! Rooms were not saved!");
+        }
     }
 
-    private File getCommandsConfig(){
+    private File getCommandsConfig() {
         File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
 
         if (!configDir.exists() && !configDir.mkdirs()) {
-            // TODO: Error Handling
-            Log.e("Tree", "Config directory does not exist and can not be created!");
-            return null;
+            Log.e("AppData", "Config directory does not exist and can not be created!");
+            throw new IllegalStateException("Config directory does not exist and can not be created.");
         }
 
         File config = new File(configDir, preferences.commandConfig().get());
         if (!config.exists()) {
-            // TODO: Error Handling
-            Log.e("Tree", "Commands config can not be found!");
-            return null;
+            Log.e("AppData", "Commands config can not be found!");
+            throw new IllegalStateException("Commands configuration file can not be found.");
         }
 
         return config;
     }
 
-    private void parseCommands(){
+    private void parseCommands() throws Exception {
         File config = getCommandsConfig();
-        if(config != null) commands = commandParser.parse(config);
+        if (config != null) commands = commandParser.parse(config);
     }
 
-    public void commitCommands(){
-        File config = getCommandsConfig();
-        if(config != null) commandParser.save(config, commands);
+    public void commitCommands() {
+        try {
+            File config = getCommandsConfig();
+            commandParser.save(config, commands);
+        } catch (Exception e) {
+            showToast("Error! Commands were not saved!");
+        }
     }
 
     private File getTreeConfig() {
         File config = new File(context.getExternalFilesDir(null), preferences.treeConfig().get());
 
         if (!config.exists()) {
-            // TODO: Error Handling
-            Log.e("Tree", "Commands config can not be found!");
-            return null;
+            try {
+                config.createNewFile();
+                Log.i("AppData", "Tree config was created!");
+            } catch (IOException e) {
+                showToast("ERROR - " + e.getLocalizedMessage());
+                Log.e("AppData", e.getLocalizedMessage());
+                return null;
+            }
         }
 
         return config;
     }
 
-    public void commitTree(){
+    public void commitTree() {
         File config = getTreeConfig();
         if (config != null) {
             treeParser.save(config, rootRooms);
@@ -164,7 +187,7 @@ public class AppData {
         } else {
             for (Room room : rootRooms) {
                 for (Combo combo : room.getCombo()) {
-                    if(combo.getId() == id) return combo;
+                    if (combo.getId() == id) return combo;
                 }
             }
         }
@@ -183,10 +206,10 @@ public class AppData {
                 }
             }
 
-            if(foundPosition >= 0){
-                if(room.getCombo().size() == 1){
+            if (foundPosition >= 0) {
+                if (room.getCombo().size() == 1) {
                     deleteRoom = roomPos;
-                }else{
+                } else {
                     room.getCombo().remove(foundPosition);
                 }
                 break;
@@ -219,13 +242,14 @@ public class AppData {
             // Whole flat room should be first
             if (roomId == 0) {
                 rootRooms.add(0, room);
-            }else
+            } else
                 rootRooms.add(room);
         }
     }
 
     public void moveCombo(Combo movedCombo, int toRoomId) {
-        int pos; boolean moved = false;
+        int pos;
+        boolean moved = false;
         for (Room room : rootRooms) {
             pos = 0;
             for (Combo combo : room.getCombo()) {
@@ -251,7 +275,7 @@ public class AppData {
             // Whole flat room should be first
             if (toRoomId == 0) {
                 rootRooms.add(0, room);
-            }else
+            } else
                 rootRooms.add(room);
         }
     }
@@ -262,55 +286,59 @@ public class AppData {
 
     private Room findRoom(int id, Map<Integer, Room> roomMap) {
         Room room;
-        for (Map.Entry entryRoom: roomMap.entrySet()) {
+        for (Map.Entry entryRoom : roomMap.entrySet()) {
             room = (Room) entryRoom.getValue();
-            if(id == room.getId()) return  room;
+            if (id == room.getId()) return room;
         }
         return null;
     }
 
     private Room findRoom(int id, List<Room> roomList) {
         for (Room room : roomList) {
-            if(id == room.getId()) return  room;
+            if (id == room.getId()) return room;
         }
         return null;
     }
 
 
-    private void transferListToTree(){
-        for(Room room : rootRooms){
-            if(room.getCombo() != null)
+    private void transferListToTree() {
+        for (Room room : rootRooms) {
+            if (room.getCombo() != null)
                 processRoom(rootTree, room);
         }
     }
 
-    private void processRoom(Map<Integer, Node> map,  Room room){
+    private void processRoom(Map<Integer, Node> map, Room room) {
         Node root = new Node();
         map.put(room.getId(), root);
 
-        for(Combo combo : room.getCombo()){
-            if(combo.getId() > highestComboId) highestComboId = combo.getId();
+        for (Combo combo : room.getCombo()) {
+            if (combo.getId() > highestComboId) highestComboId = combo.getId();
             processCombo(root, combo.getCommandId(), combo.getMyoPose(), 0);
         }
     }
 
-    private void processCombo(Node tree, int commandId, List<MyoPose> poses, int actualPose){
+    private void processCombo(Node tree, int commandId, List<MyoPose> poses, int actualPose) {
 
         // All poses have been already applied, save command
-        if(actualPose >= poses.size()){
+        if (actualPose >= poses.size()) {
             tree.setCommand(commands.get(commandId));
             return;
         }
 
         // If there is already existing Node with pose, follow that path otherwise create new Node
         Pose pose = poses.get(actualPose).getType();
-        if(tree.getChild(pose) != null){
+        if (tree.getChild(pose) != null) {
             processCombo(tree.getChild(pose), commandId, poses, ++actualPose);
-        }else{
+        } else {
             Node node = new Node(pose);
             tree.addChild(pose, node);
             processCombo(node, commandId, poses, ++actualPose);
         }
+    }
+
+    private void showToast(String text) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     public Map<Integer, Node> getRootTree() {

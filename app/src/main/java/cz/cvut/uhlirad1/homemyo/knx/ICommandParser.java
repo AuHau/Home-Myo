@@ -9,7 +9,7 @@ import java.util.Map;
  * Date: 4.12.14
  */
 public interface ICommandParser {
-    public Map<Integer, Command> parse(File config);
+    public Map<Integer, Command> parse(File config) throws Exception;
 
-    public void save(File config, Map<Integer, Command> commands);
+    public void save(File config, Map<Integer, Command> commands) throws Exception;
 }
