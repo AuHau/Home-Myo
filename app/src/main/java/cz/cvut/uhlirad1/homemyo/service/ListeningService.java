@@ -153,21 +153,12 @@ public class ListeningService extends Service {
 
             hub.setLockingPolicy(Hub.LockingPolicy.NONE);
 
-            // TODO: Notifikace pro uživatele když neni Myo synchronizováno
             listener = MyoListener_.getInstance_(context);
             hub.addListener(listener);
 
-            // TODO: Automatický connect k známému Myo (ukládání zpárovaného Myo; ukládat posledního známého)
             // TODO: Automatický connect jenom v případě, že jsem na domácí WiFi
-            if (hub.getConnectedDevices().isEmpty()) {
-//                String myoAddress = PreferenceManager.getDefaultSharedPreferences(context).getString("myo_mac", "");
-                // If we have a saved Myo MAC address then connect to it, otherwise look for one nearby.
-//                if (TextUtils.isEmpty(myoAddress)) {
-//                hub.attachToAdjacentMyo();
-//                } else {
-//                    hub.attachByMacAddress(myoAddress);
-                    hub.attachByMacAddress("CE:CD:53:B4:7C:DA");
-//                }
+            if (hub.getConnectedDevices().isEmpty() && !preferences.myoMac().get().isEmpty()) {
+                    hub.attachByMacAddress(preferences.myoMac().get());
             }
         }
     }

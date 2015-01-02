@@ -7,13 +7,22 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 import com.thalmic.myo.Hub;
+import com.thalmic.myo.Myo;
 import cz.cvut.uhlirad1.homemyo.R;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.util.List;
 
 /**
  * Author: Adam Uhlíř <uhlir.a@gmail.com>
  * Date: 7.12.14
  */
+@EActivity
 public class SettingsActivity extends Activity {
+
+    @Pref
+    protected AppPreferences_ preferences;
 
     public static String PREF_NAME = "AppPreferences";
 
@@ -38,11 +47,24 @@ public class SettingsActivity extends Activity {
             finish();
             return;
         }
+
+        // TODO: Nasty hack for saving connected Myo MAC address - find better way
+        if (!preferences.myoMac().get().isEmpty() && !areMyosConnected) {
+            hub.attachByMacAddress(preferences.myoMac().get());
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        List<Myo> myos = Hub.getInstance().getConnectedDevices();
+        if (myos.size() > 0) {
+            preferences.myoMac().put(myos.get(0).getMacAddress());
+        }else{
+            preferences.myoMac().put("");
+        }
+
         if(!areMyosConnected) Hub.getInstance().shutdown();
     }
 

@@ -37,13 +37,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity"
+            android:name="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity_"
             android:label="@string/activity_settings"
             android:parentActivityName="cz.cvut.uhlirad1.homemyo.MainActivity_" >
         </activity>
         <activity
             android:name="com.thalmic.myo.scanner.ScanActivity"
-            android:parentActivityName="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity" />
+            android:parentActivityName="cz.cvut.uhlirad1.homemyo.settings.SettingsActivity_" />
 
         <service android:name="cz.cvut.uhlirad1.homemyo.service.ListeningService_"
                  android:enabled="true"

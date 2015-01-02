@@ -14,6 +14,7 @@ import cz.cvut.uhlirad1.homemyo.adapters.ComboAdapter;
 import cz.cvut.uhlirad1.homemyo.service.ListeningService_;
 import cz.cvut.uhlirad1.homemyo.settings.AppPreferences_;
 import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity;
+import cz.cvut.uhlirad1.homemyo.settings.SettingsActivity_;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
@@ -81,7 +82,7 @@ public class MainActivity extends ListActivity {
     @OptionsItem
     public void actionSettings() {
         Intent intent = new Intent();
-        intent.setClass(this, SettingsActivity.class);
+        intent.setClass(this, SettingsActivity_.class);
         startActivity(intent);
     }
 
