@@ -125,9 +125,9 @@ public class ListeningService extends Service {
         @Override
         public void handleMessage(Message msg) {
             Log.i("ListenerService", "Location recieved - " + msg.arg1);
-            if (msg.what == LOCATION_UPDATE) {
+//            if (msg.what == LOCATION_UPDATE) {
                 location.location().put(msg.arg1);
-            }
+//            }
             super.handleMessage(msg);
         }
     }

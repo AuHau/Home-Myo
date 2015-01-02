@@ -24,7 +24,7 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
     @Pref
     protected AppPreferences_ preferences;
 
-    private HashMap<Integer, Boolean> states;
+    private static HashMap<Integer, Boolean> states = new HashMap<Integer, Boolean>();;
 
     private Socket socket;
 
@@ -32,7 +32,7 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
     protected Context context;
 
     public CatAdapter() {
-        states = new HashMap<Integer, Boolean>();
+
     }
 
     @Override
@@ -55,7 +55,8 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
             OutputStream out = socket.getOutputStream();
             PrintWriter output = new PrintWriter(out);
 
-            boolean actualState = getCatState(output, telegram);
+//            boolean actualState = getCatState(output, telegram);
+            boolean actualState = (Boolean) getState(telegram);
             telegram.setBoolean(!actualState);
 
             output.println(telegram.assembleTelegram());
@@ -74,8 +75,8 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String request = in.readLine();
 
+        Log.i("CatAdapter", "Recieved state - " + request);
         if (request.equals("true") || request.equals("false")) {
-            Log.i("CatAdapter", "Recieved state - " + request);
             return Boolean.parseBoolean(request);
         }
 
@@ -88,11 +89,12 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
         // TODO: Opravdické ověřování stavu z KNX sítě
         int commandId = telegram.getCommand().getId();
         if(!states.containsKey(commandId)){
-            states.put(commandId, true);
-            return true;
+            states.put(commandId, false);
+            return false;
         }
 
-        return null;
+        states.put(commandId, !states.get(commandId));
+        return states.get(commandId);
     }
 
 }

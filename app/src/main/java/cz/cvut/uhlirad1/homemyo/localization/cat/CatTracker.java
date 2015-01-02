@@ -55,7 +55,7 @@ public class CatTracker implements ITracker {
     @Override
     public Room getLocation(boolean isWaiting) throws TrackerException {
 
-        Room room = mapping.get(location.location().get());
+        Room room = mapping.get(Integer.toString(location.location().get()));
         if(room == null) throw new TrackerException();
 
         return room;
