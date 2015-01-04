@@ -170,7 +170,11 @@ public class AppData {
     public void commitTree() {
         File config = getTreeConfig();
         if (config != null) {
-            treeParser.save(config, rootRooms);
+            try {
+                treeParser.save(config, rootRooms);
+            } catch (Exception e) {
+                setErrorMsg("Error! Tree were not saved!");
+            }
             transferListToTree();
         }
     }
@@ -340,7 +344,11 @@ public class AppData {
     }
 
     private void setErrorMsg(String text) {
-//        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        // Show toast for errors which does not cause error crash.
+        if (commands == null || rooms == null || rootRooms == null) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        }
+
         errorMsg = text;
     }
 

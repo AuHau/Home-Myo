@@ -97,7 +97,6 @@ public class ListeningService extends Service {
                 .setPriority(Notification.PRIORITY_LOW)
                 .build();
 
-        // TODO: Vyřešit problém s nepřesměrováním na Aplikaci
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0, n);
@@ -156,7 +155,6 @@ public class ListeningService extends Service {
             listener = MyoListener_.getInstance_(context);
             hub.addListener(listener);
 
-            // TODO: Automatický connect jenom v případě, že jsem na domácí WiFi
             if (hub.getConnectedDevices().isEmpty() && !preferences.myoMac().get().isEmpty()) {
                     hub.attachByMacAddress(preferences.myoMac().get());
             }

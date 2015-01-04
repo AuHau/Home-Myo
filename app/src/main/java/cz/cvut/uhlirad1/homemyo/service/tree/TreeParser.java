@@ -18,35 +18,29 @@ import java.util.Map;
  */
 public class TreeParser {
 
-    public List<Room> parse(File config){
+    public List<Room> parse(File config) throws Exception {
         Serializer serializer = new Persister();
 
         Rooms rooms = null;
         try {
             rooms = serializer.read(Rooms.class, config);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("TreeParser", "Parsing Tree config was unsuccessful!");
+            throw new Exception("Tree configuration file was not possible to save.");
         }
 
         return rooms.getRoom();
     }
 
-    public void save(File config, List<Room> rooms) {
-        if (!config.exists()) {
-            // TODO: Error Handling
-            Log.e("TreeParser", "Tree config doesn't exist!");
-            return;
-        }
-
+    public void save(File config, List<Room> rooms) throws Exception {
         Rooms rooms1 = new Rooms();
         rooms1.setRoom(rooms);
         Serializer serializer = new Persister();
         try {
             serializer.write(rooms1, config);
         } catch (Exception e) {
-            // TODO: Error Handling
-            Log.e("TreeParser", "Saving Tree was unsuccessful!");
-            e.printStackTrace();
+            Log.e("TreeParser", "Saving Tree config was unsuccessful!");
+            throw new Exception("Tree configuration file was not possible to save.");
         }
     }
 }
