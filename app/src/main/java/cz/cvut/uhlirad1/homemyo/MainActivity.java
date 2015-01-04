@@ -39,13 +39,12 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         if (!data.areDataValid()) {
-            finish();
-            return;
+            ErrorActivity_.intent(this).start();
+        } else {
+            setContentView(R.layout.activity_main);
+            setListAdapter(adapter);
         }
 
-        setContentView(R.layout.activity_main);
-
-        setListAdapter(adapter);
     }
 
     @Override
@@ -58,12 +57,14 @@ public class MainActivity extends ListActivity {
 
     @Override
     protected void onResume() {
-        ((ComboAdapter) getListAdapter()).notifyDataSetChanged();
+        if(getListAdapter() != null) ((ComboAdapter) getListAdapter()).notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if(!data.areDataValid()) super.onCreateOptionsMenu(menu);
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         serviceIntent = new Intent(this, ListeningService_.class);

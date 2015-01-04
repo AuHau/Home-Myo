@@ -47,6 +47,7 @@ public class AppData {
     private TreeParser treeParser;
 
     private int highestComboId = 0;
+    private String errorMsg;
 
     @Pref
     protected AppPreferences_ preferences;
@@ -55,7 +56,8 @@ public class AppData {
     protected Context context;
 
     @AfterInject
-    protected void init(){
+    void init(){
+        errorMsg = "";
         roomParser = RoomParserFactory.createParser();
         commandParser = CommandParserFactory.createCommandParser();
 
@@ -72,10 +74,10 @@ public class AppData {
             }
         } catch (IllegalStateException e) {
             Log.e("AppData", "Error! " + e.getMessage());
-            showToast(e.getMessage());
+            setErrorMsg(e.getMessage());
         } catch (Exception e) {
             Log.e("AppData", "Error! " + e.getMessage());
-            showToast(e.getMessage());
+            setErrorMsg(e.getMessage());
         }
     }
 
@@ -113,7 +115,7 @@ public class AppData {
             File config = getRoomsConfig();
             roomParser.save(config, rooms);
         } catch (Exception e) {
-            showToast("Error! Rooms were not saved!");
+            setErrorMsg("Error! Rooms were not saved!");
         }
     }
 
@@ -144,7 +146,7 @@ public class AppData {
             File config = getCommandsConfig();
             commandParser.save(config, commands);
         } catch (Exception e) {
-            showToast("Error! Commands were not saved!");
+            setErrorMsg("Error! Commands were not saved!");
         }
     }
 
@@ -156,7 +158,7 @@ public class AppData {
                 config.createNewFile();
                 Log.i("AppData", "Tree config was created!");
             } catch (IOException e) {
-                showToast("ERROR - " + e.getLocalizedMessage());
+                setErrorMsg("ERROR - " + e.getLocalizedMessage());
                 Log.e("AppData", e.getLocalizedMessage());
                 return null;
             }
@@ -337,8 +339,13 @@ public class AppData {
         }
     }
 
-    private void showToast(String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    private void setErrorMsg(String text) {
+//        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        errorMsg = text;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
     public Map<Integer, Node> getRootTree() {
