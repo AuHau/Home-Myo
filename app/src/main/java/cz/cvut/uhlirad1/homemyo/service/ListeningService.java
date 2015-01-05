@@ -20,8 +20,10 @@ import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 8.12.14
+ * Service which is running in separate thread and is listening for Myo gestures,
+ * detect Combos and send commands to KNX network.
+ *
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 @EService
 public class ListeningService extends Service {
@@ -44,6 +46,9 @@ public class ListeningService extends Service {
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
 
+    /**
+     * Method will create new Thread for the Myo listener.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,6 +60,13 @@ public class ListeningService extends Service {
         mServiceHandler = new ServiceHandler(mServiceLooper, this);
     }
 
+    /**
+     * Method will start created Thread and show notification.
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         showToast("Watching for Myo gestures");
@@ -73,6 +85,9 @@ public class ListeningService extends Service {
         return messenger.getBinder();
     }
 
+    /**
+     * Method will terminate Myo listener and Hub
+     */
     @Override
     public void onDestroy() {
         showToast("Stop watching for Myo gestures");
@@ -83,6 +98,9 @@ public class ListeningService extends Service {
         destroyNotification();
     }
 
+    /**
+     * Method will create persist notification
+     */
     private void makeNotification(){
         Intent notifyIntent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
@@ -102,13 +120,19 @@ public class ListeningService extends Service {
         notificationManager.notify(0, n);
     }
 
+    /**
+     * Method will destroy persist notification
+     */
     private void destroyNotification(){
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
     }
 
-
+    /**
+     * Method will show Toast
+     * @param text text showed in Toast
+     */
     private void showToast(String text) {
         Log.w(TAG, text);
         if (toast == null) {
@@ -119,18 +143,23 @@ public class ListeningService extends Service {
         toast.show();
     }
 
+    /**
+     * Class which is used by RTLS localization system for passing
+     * detected user locality.
+     */
     public final class LocationMessenger extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
             Log.i("ListenerService", "Location recieved - " + msg.arg1);
-//            if (msg.what == LOCATION_UPDATE) {
                 location.location().put(msg.arg1);
-//            }
             super.handleMessage(msg);
         }
     }
 
+    /**
+     * Class which handle Myo initialization and starting new Thread.
+     */
     private final class ServiceHandler extends Handler {
 
         private Context context;

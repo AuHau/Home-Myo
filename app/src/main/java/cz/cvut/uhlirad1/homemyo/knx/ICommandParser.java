@@ -5,11 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 4.12.14
+ * Interface which specifies Command parser.
+ *
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 public interface ICommandParser {
+    /**
+     * Method will parse file config, which should contain Commands definition.
+     * @param config
+     * @return
+     * @throws Exception
+     */
     public Map<Integer, Command> parse(File config) throws Exception;
 
+    /**
+     * Method will save Commands definied in commands variable into File config.
+     * @param config
+     * @param commands
+     * @throws Exception
+     */
     public void save(File config, Map<Integer, Command> commands) throws Exception;
 }

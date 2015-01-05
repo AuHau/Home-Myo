@@ -27,16 +27,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 17.12.14
+ * Class which implements AbstractDeviceListener and serves as Myo Listener.
+ *
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 @EBean
 public class MyoListener extends AbstractDeviceListener {
 
+    /**
+     * Adapter instance for sending commands into KNX network
+     */
     private IAdapter adapter;
 
+    /**
+     * Tracker instance for getting user location
+     */
     private ITracker tracker;
 
+    /**
+     * Room dependant trees
+     */
     private Map<Integer, Node> trees;
 
     @Pref
@@ -50,15 +60,27 @@ public class MyoListener extends AbstractDeviceListener {
 
     //////////////////////////////////
 
+    /**
+     * Actual node of room tree
+     */
     private Node actualRoomNode;
 
+    /**
+     * Actual node of whole flat tree
+     */
     private Node actualAllNode;
 
+    /**
+     * Instance of currently active lock timer
+     */
     private LockingRunnable currentLock;
 
+    /**
+     * Specify if Myo is locked
+     */
     private boolean locked;
 
-    private Handler handler ;
+    private Handler handler;
 
     @AfterInject
     public void init() {
@@ -72,9 +94,16 @@ public class MyoListener extends AbstractDeviceListener {
         tracker = TrackerFactory.createTracker(context);
     }
 
+    /**
+     * Callback method which is called by Myo SDK when
+     * Myo detect gesture.
+     *
+     * @param myo
+     * @param timestamp
+     * @param pose
+     */
     @Override
     public void onPose(Myo myo, long timestamp, Pose pose) {
-        // TODO: Krátký sleep po udělání gesta? Je to nutný?
         // Skip rest pose
         if (pose == Pose.REST) return;
         

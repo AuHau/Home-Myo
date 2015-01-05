@@ -29,15 +29,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created on 24.12.14
+ * Singleton class that manage all data in application.
  *
  * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 @EBean(scope = EBean.Scope.Singleton)
 public class AppData {
 
+    /**
+     * Tree root of tree format.
+     */
     private Map<Integer, Node> rootTree;
+
+    /**
+     * Tree root of list of rooms format
+     */
     private List<Room> rootRooms;
+
+
     private Map<Integer, Command> commands;
     private Map<Integer, Room> rooms;
     private Map<String, Room> roomMapping;
@@ -46,6 +55,10 @@ public class AppData {
     private ICommandParser commandParser;
     private TreeParser treeParser;
 
+    /**
+     * Variable for storing highest Combo Id in Tree config.
+     * It is used for creating new combos.
+     */
     private int highestComboId = 0;
     private String errorMsg;
 
@@ -55,6 +68,11 @@ public class AppData {
     @RootContext
     protected Context context;
 
+    /**
+     * Method will load and parse all necessary configuration files
+     * for application run.
+     * Also it is method which is caching all Exceptions from parsers and so on.
+     */
     @AfterInject
     void init(){
         errorMsg = "";
@@ -81,10 +99,19 @@ public class AppData {
         }
     }
 
+    /**
+     * Method which defines if during loading and parsing
+     * was any error and therefore if data are valid.
+     * @return true if data are valid, otherwise false.
+     */
     public boolean areDataValid() {
         return rootRooms != null && commands != null && rooms != null;
     }
 
+    /**
+     * Method will return File instance of Rooms config
+     * @return Rooms config
+     */
     private File getRoomsConfig() {
         File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
 
@@ -102,6 +129,12 @@ public class AppData {
         return config;
     }
 
+    /**
+     * Method will parse Rooms config.
+     * If there is some error during parsing, Exception is thrown.
+     *
+     * @throws Exception
+     */
     private void parseRooms() throws Exception {
         File config = getRoomsConfig();
         if (config != null) {
@@ -110,6 +143,9 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will save actual rooms variable into Rooms config.
+     */
     public void commitRooms() {
         try {
             File config = getRoomsConfig();
@@ -119,6 +155,10 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will return File instance of Commands config
+     * @return Commands config
+     */
     private File getCommandsConfig() {
         File configDir = new File(Environment.getExternalStorageDirectory() + File.separator + preferences.applicationFolder().get());
 
@@ -136,11 +176,20 @@ public class AppData {
         return config;
     }
 
+    /**
+     * Method will parse Commands config.
+     * If there is some error during parsing, Exception is thrown.
+     *
+     * @throws Exception
+     */
     private void parseCommands() throws Exception {
         File config = getCommandsConfig();
         if (config != null) commands = commandParser.parse(config);
     }
 
+    /**
+     * Method will save actual commands variable into Commands config.
+     */
     public void commitCommands() {
         try {
             File config = getCommandsConfig();
@@ -150,6 +199,10 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will return File instance of Tree config
+     * @return Tree config
+     */
     private File getTreeConfig() {
         File config = new File(context.getExternalFilesDir(null), preferences.treeConfig().get());
 
@@ -167,6 +220,9 @@ public class AppData {
         return config;
     }
 
+    /**
+     * Method will save actual rootRooms variable into Commands config.
+     */
     public void commitTree() {
         File config = getTreeConfig();
         if (config != null) {
@@ -179,11 +235,21 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will return Combo specified by id;
+     * @param id
+     * @return Combo
+     */
     public Combo getCombo(int id) {
         return getCombo(id, -1);
     }
 
-    // TODO: Tahle metoda nemá uplně smysl
+    /**
+     * Method will return Combo specified by id and roomId;
+     * @param id
+     * @param roomId
+     * @return
+     */
     public Combo getCombo(int id, int roomId) {
         if (roomId >= 0) {
             Room room = findRoom(id, rootRooms);
@@ -200,6 +266,12 @@ public class AppData {
         return null;
     }
 
+    /**
+     * Method will remove Combo specified by id, from rootRooms.
+     * Also if the Combo is alone in room tree, the tree will be deleted.
+     *
+     * @param id
+     */
     public void removeCombo(int id) {
         int pos, roomPos = 0, deleteRoom = -1, foundPosition = -1;
         for (Room room : rootRooms) {
@@ -229,6 +301,12 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will add Combo specified in combo, to room tree specified by roomId
+     *
+     * @param combo
+     * @param roomId
+     */
     public void addCombo(Combo combo, int roomId) {
         boolean added = false;
         for (Room room : rootRooms) {
@@ -238,14 +316,14 @@ public class AppData {
             }
         }
 
-        // Room is not currently in tree
+        // Room is not currently in rootRooms
         if (!added) {
             Room room = new Room(roomId);
             ArrayList<Combo> list = new ArrayList<Combo>();
             list.add(combo);
             room.setCombo(list);
 
-            // Whole flat room should be first
+            // Smart home room should be first
             if (roomId == 0) {
                 rootRooms.add(0, room);
             } else
@@ -253,6 +331,11 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will move Combo from its original room tree to room tree specified by toRoomId
+     * @param movedCombo
+     * @param toRoomId
+     */
     public void moveCombo(Combo movedCombo, int toRoomId) {
         int pos;
         boolean moved = false;
@@ -286,9 +369,14 @@ public class AppData {
         }
     }
 
+    /**
+     * Method will return highest Combo Id which was found in rootTree and increase its value.
+     * @return
+     */
     public int getHighestComboIdAndRaise() {
         return ++highestComboId;
     }
+
 
     private Room findRoom(int id, Map<Integer, Room> roomMap) {
         Room room;
@@ -307,6 +395,9 @@ public class AppData {
     }
 
 
+    /**
+     * Method will transform rootRooms into rootTree, which has tree format.
+     */
     private void transferListToTree() {
         for (Room room : rootRooms) {
             if (room.getCombo() != null)

@@ -1,10 +1,9 @@
 package cz.cvut.uhlirad1.homemyo.knx;
 
-import cz.cvut.uhlirad1.homemyo.knx.cat.CatTelegram;
-
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 3.12.14
+ * Interface which specifies Adapter module
+ *
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 public interface IAdapter {
 

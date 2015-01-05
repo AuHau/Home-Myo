@@ -24,6 +24,7 @@ public class ErrorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error);
 
+        // If data are already valid, sent user back to MainActivity
         if(data.areDataValid()) MainActivity_.intent(this).start();
         text.setText(data.getErrorMsg());
     }
@@ -31,18 +32,13 @@ public class ErrorActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

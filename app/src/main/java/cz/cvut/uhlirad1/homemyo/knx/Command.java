@@ -9,8 +9,10 @@ import org.simpleframework.xml.Root;
 import java.util.List;
 
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 3.12.14
+ * Command class which defines XML format of command and also serves as
+ * class which maintain commands in application.
+ *
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 @Root(name = "emp", strict = false)
 public class Command {

@@ -38,6 +38,7 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // If there was some error while loading data in AppData display ErrorActivity
         if (!data.areDataValid()) {
             ErrorActivity_.intent(this).start();
         } else {
@@ -69,7 +70,6 @@ public class MainActivity extends ListActivity {
 
         serviceIntent = new Intent(this, ListeningService_.class);
 
-        // TODO: Když Service skončí Switch by se měl přepnout do původní polohy (v případě že to nebylo vyvoláno uživatelem)
         Switch serviceSwitch = (Switch) menu.findItem(R.id.action_layout_switch_daemon).getActionView().findViewById(R.id.action_service_switch);
         serviceSwitch.setChecked(isListeningServiceRunning());
         serviceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -86,6 +86,9 @@ public class MainActivity extends ListActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Method which is called when Settings button is clicked in OptionsMenu
+     */
     @OptionsItem
     public void actionSettings() {
         Intent intent = new Intent();
@@ -93,11 +96,18 @@ public class MainActivity extends ListActivity {
         startActivity(intent);
     }
 
+    /**
+     * Method which is called when Add button is clicked in OptionsMenu
+     */
     @OptionsItem
     public void actionAdd() {
         AddActivity_.intent(this).start();
     }
-    
+
+    /**
+     * Method which will find out if Listening Service is running or not
+     * @return
+     */
     private boolean isListeningServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

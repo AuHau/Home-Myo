@@ -16,8 +16,8 @@ import java.io.File;
 import java.util.*;
 
 /**
- * Author: Adam Uhlíř <uhlir.a@gmail.com>
- * Date: 23.12.14
+ * Class for managing Rooms XML configuration file
+ * @author: Adam Uhlíř <uhlir.a@gmail.com>
  */
 public class XMLRoomParser implements IRoomParser {
 
@@ -55,6 +55,13 @@ public class XMLRoomParser implements IRoomParser {
         rooms.put(0, new Room(0, "Smart Home"));
     }
 
+
+    /**
+     * {@inheritDoc}
+     * @param config
+     * @return
+     * @throws Exception
+     */
     @Override
     public Map<Integer, Room> parse(File config) throws Exception {
         if (!config.exists()) {
@@ -69,11 +76,21 @@ public class XMLRoomParser implements IRoomParser {
         return rooms;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public Map<String, Room> parseMapping() {
         return mapping;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param config
+     * @param rooms
+     * @throws Exception
+     */
     @Override
     public void save(File config, Map<Integer, Room> rooms) throws Exception {
         if (!config.exists()) {
