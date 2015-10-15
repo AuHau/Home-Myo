@@ -48,7 +48,6 @@ public class SettingsActivity extends Activity {
             return;
         }
 
-        // TODO: Nasty hack for saving connected Myo MAC address - find better way
         if (!preferences.myoMac().get().isEmpty() && !areMyosConnected) {
             hub.attachByMacAddress(preferences.myoMac().get());
         }

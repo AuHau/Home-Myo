@@ -74,9 +74,6 @@ public class DetailActivity extends Activity {
 
         roomName.setText(data.getRooms().get(roomId).getName());
 
-        // TODO: Zprovoznit zobrazení ikonky u typu elementu
-//        commandTypeIcon.setImageResource(spinnerCommand.getElementType().getIconResource());
-
         int i = 0;
         TextView number, name;
         ImageView icon;

@@ -102,11 +102,6 @@ public class AddActivity extends Activity {
     @Click
     public void btnSave() {
 
-        // TODO: Kontrolovat Room Combos, zdali se nepřekrývají s All Combos (ty by se v některých místnosti tedy nemohli zpustit). Což by nemuselo být na škodu, ale uživatel by o tom měl vědět.
-        // TODO: Zkontrolovat vyplnění formuláře (aspon jedno Gesture atp).
-        // Todo: Zkontrolovat zdali již neexistuje Combo se stejnými Poses.
-
-
         List<MyoPose> poses = new ArrayList<MyoPose>();
 
         if (((MyoPose)spinnerGesture1.getSelectedItem()).getType() != null) {

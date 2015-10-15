@@ -55,7 +55,6 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
             OutputStream out = socket.getOutputStream();
             PrintWriter output = new PrintWriter(out);
 
-//            boolean actualState = getCatState(output, telegram);
             boolean actualState = (Boolean) getState(telegram);
             telegram.setBoolean(!actualState);
 
@@ -86,7 +85,6 @@ public class CatAdapter extends AsyncTask<ITelegram, Void, Void> implements IAda
 
     @Override
     public Object getState(ITelegram telegram) {
-        // TODO: Opravdické ověřování stavu z KNX sítě
         int commandId = telegram.getCommand().getId();
         if(!states.containsKey(commandId)){
             states.put(commandId, false);

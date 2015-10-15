@@ -186,7 +186,6 @@ public class MyoListener extends AbstractDeviceListener {
     private void sendCommand(Command command) {
         ITelegram telegram = TelegramFactory.createTelegram();
         telegram.setCommand(command);
-//        telegram.setBoolean((Boolean) adapter.getState(telegram));
         adapter.sendTelegram(telegram);
     }
 
