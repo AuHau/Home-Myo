@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Home Myo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="daemon_toggle_text">Daemon</string>
+    <string name="pref_knx_category">KNX communication</string>
+    <string name="pref_knx_ip">IP address</string>
+    <string name="pref_knx_port">Port number</string>
+    <string name="pref_loc_enabled">Localization enabled</string>
+    <string name="activity_settings">Settings</string>
+    <string name="pref_lock_timeout">Lock timeout</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pff">Icon</string>
+    <string name="title_activity_detail">Detail</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="title_activity_add">Add combo</string>
+    <string name="title_activity_error">Error</string>
+
+</resources>

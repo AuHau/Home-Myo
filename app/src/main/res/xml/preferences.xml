@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="@string/pref_knx_category"
+            android:key="knx_category">
+        <EditTextPreference
+                android:key="knxIp"
+                android:dialogMessage="Enter IP address of Switchboard"
+                android:title="@string/pref_knx_ip"
+                />
+        <EditTextPreference
+                android:key="knxPort"
+                android:dialogMessage="Enter port number of Switchboard"
+                android:title="@string/pref_knx_port"
+                android:numeric="integer"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Localization"
+            android:key="loc_category">
+        <CheckBoxPreference
+                android:key="locEnabled"
+                android:title="@string/pref_loc_enabled"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Myo"
+        android:key="myo_category">
+        <Preference android:title="Connect Myo">
+            <intent android:action="android.intent.action.VIEW"
+                    android:targetPackage="cz.cvut.uhlirad1.homemyo"
+                    android:targetClass="com.thalmic.myo.scanner.ScanActivity"/>
+        </Preference>
+        <EditTextPreference
+                android:key="lockTimeout"
+                android:dialogMessage="Enter time which application will wait before relocking Myo"
+                android:title="@string/pref_lock_timeout"
+                android:numeric="integer"/>
+    </PreferenceCategory>
+</PreferenceScreen>
